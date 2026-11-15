@@ -1,0 +1,1965 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Energia em Foco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: barra lateral azul-marinho + área de trabalho clara; filtros globais no topo, uma seção por vez. */
+:root{
+  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  --bg:#F3F6FA; --surface:#FFFFFF; --surface-2:#EAF0F7; --line:#D8E1EC;
+  --ink:#0E2038; --ink-2:#47596F; --ink-3:#74869D;
+  --accent:#1D5FD0; --accent-soft:#E3EDFB;
+  --ok:#1B8A5A; --ok-soft:#E0F3EA; --ok-ink:#116B43;
+  --warn:#D08A00; --warn-soft:#FBF0D6; --warn-ink:#7D4D00;
+  --crit:#C93A3A; --crit-soft:#FBE4E2; --crit-ink:#A22525;
+  --side-bg:#0B2545; --side-ink:#E3ECF8; --side-dim:#9FB3CF; --side-on:#17396B;
+  --tip-bg:#0B2545; --tip-fg:#FFFFFF;
+  --s1:#12335E; --s2:#2F6FDB; --s3:#79A7EE; --s4:#8896AD; --s5:#C3CCDA;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#08111F; --surface:#0F1E33; --surface-2:#152A47; --line:#21385A;
+  --ink:#E6EEF9; --ink-2:#A6B7CE; --ink-3:#7589A7;
+  --accent:#5B9BFF; --accent-soft:#16305A;
+  --ok:#3DC58A; --ok-soft:#10352A; --ok-ink:#6FE0AE;
+  --warn:#F0B13A; --warn-soft:#3A2D0F; --warn-ink:#F5C766;
+  --crit:#FF6B6B; --crit-soft:#3C1A1D; --crit-ink:#FF9A9A;
+  --side-bg:#050D1A; --side-on:#12294B;
+  --tip-bg:#E6EEF9; --tip-fg:#0B2545;
+  --s1:#A9CBFF; --s2:#5B9BFF; --s3:#2F6FDB; --s4:#6F82A1; --s5:#3A4D6B;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#08111F; --surface:#0F1E33; --surface-2:#152A47; --line:#21385A;
+  --ink:#E6EEF9; --ink-2:#A6B7CE; --ink-3:#7589A7;
+  --accent:#5B9BFF; --accent-soft:#16305A;
+  --ok:#3DC58A; --ok-soft:#10352A; --ok-ink:#6FE0AE;
+  --warn:#F0B13A; --warn-soft:#3A2D0F; --warn-ink:#F5C766;
+  --crit:#FF6B6B; --crit-soft:#3C1A1D; --crit-ink:#FF9A9A;
+  --side-bg:#050D1A; --side-on:#12294B;
+  --tip-bg:#E6EEF9; --tip-fg:#0B2545;
+  --s1:#A9CBFF; --s2:#5B9BFF; --s3:#2F6FDB; --s4:#6F82A1; --s5:#3A4D6B;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,ul,dl,dd{margin:0}
+ul{padding:0;list-style:none}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{display:grid;grid-template-columns:244px minmax(0,1fr);min-height:100%}
+.side{background:var(--side-bg);color:var(--side-ink)}
+.side-in{position:sticky;top:env(safe-area-inset-top,0px);padding:22px 14px;display:flex;flex-direction:column;gap:22px;max-height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:0 6px}
+.brand svg{width:34px;height:34px;flex:none}
+.brand b{display:block;font-size:15px;font-weight:600;letter-spacing:.01em}
+.brand small{display:block;color:var(--side-dim);font-size:11.5px}
+nav{display:flex;flex-direction:column;gap:2px}
+nav a{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:8px;color:var(--side-dim);text-decoration:none;font-weight:500;font-size:13.5px}
+nav a svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+nav a:hover{color:var(--side-ink);background:rgba(255,255,255,.05)}
+nav a[aria-current="page"]{background:var(--side-on);color:#fff}
+.side-foot{font-size:11.5px;color:var(--side-dim);padding:0 6px;line-height:1.5}
+.main{min-width:0;padding:20px max(16px,env(safe-area-inset-right,0px)) 56px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:16px}
+@media(min-width:900px){.main{padding-inline:32px}}
+.banner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--warn-soft);color:var(--warn-ink);border:1px solid var(--warn);border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:500}
+.banner a{color:inherit;font-weight:600}
+.eyebrow{font:500 11px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.top h1{font-size:26px;line-height:1.2;font-weight:700;letter-spacing:-.01em;text-wrap:balance;margin-top:6px}
+.lead{color:var(--ink-2);max-width:68ch;margin-top:4px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.card h2{font-size:15px;font-weight:600}
+.ch{display:flex;flex-direction:column;gap:2px;margin-bottom:12px}
+.cs{color:var(--ink-3);font-size:12.5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g-kpi{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.all{grid-column:1/-1}
+@media(max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side-in{position:static;max-height:none;padding:14px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));gap:12px}
+  nav{flex-direction:row;overflow-x:auto;padding-bottom:4px}
+  nav a{white-space:nowrap}
+  .side-foot{display:none}
+  .g2,.g3{grid-template-columns:minmax(0,1fr)}
+}
+.filters{display:grid;grid-template-columns:minmax(0,2.2fr) repeat(3,minmax(0,1fr));gap:14px 18px;align-items:start}
+@media(max-width:1100px){.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.filters .wide{grid-column:1/-1}}
+@media(max-width:560px){.filters{grid-template-columns:minmax(0,1fr)}}
+.fl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fl>label,.fl>span.lb{font:500 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+input[type=number],input[type=text],select,textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:7px 9px;min-width:0}
+textarea{font:12px/1.5 var(--mono);resize:vertical;min-height:110px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input:disabled{opacity:.5}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 11px;font-size:12.5px;font-weight:500;cursor:pointer;color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip.pre{border-style:dashed}
+.chk{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2)}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;border:1px solid var(--accent);border-radius:7px;padding:7px 13px;font-weight:600;font-size:13px;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.sm{padding:4px 10px;font-size:12px}
+.lnk{background:none;border:0;color:var(--accent);font-weight:600;cursor:pointer;padding:0;font-size:12.5px}
+.pill{display:inline-flex;align-items:center;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok-ink)}
+.pill.warn{background:var(--warn-soft);color:var(--warn-ink)}
+.pill.crit{background:var(--crit-soft);color:var(--crit-ink)}
+.pill.info{background:var(--accent-soft);color:var(--accent)}
+.pill.mute{background:var(--surface-2);color:var(--ink-2);border:1px dashed var(--ink-3)}
+.kpi{display:flex;flex-direction:column;gap:6px}
+.kl{font:500 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.kv{font-size:28px;line-height:1.1;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.kv span{font-size:13px;font-weight:500;color:var(--ink-3);margin-left:5px;letter-spacing:0}
+.kp{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ks{font-size:12px;color:var(--ink-3)}
+.ke{font-size:12.5px;color:var(--ink-2)}
+.track{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.track i{display:block;height:100%;border-radius:99px;background:var(--ok)}
+.track i.warn{background:var(--warn)}.track i.crit{background:var(--crit)}
+.insight{border-left-width:4px}
+.insight.ok{border-left-color:var(--ok)}.insight.warn{border-left-color:var(--warn)}.insight.crit{border-left-color:var(--crit)}
+.in-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.in-txt{font-size:17px;line-height:1.5;margin:10px 0 14px;max-width:80ch;text-wrap:pretty}
+.in-actions{display:flex;gap:8px;flex-wrap:wrap}
+.cbox{position:relative;height:300px}
+.cbox.tall{height:340px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:12px;color:var(--ink-2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.q{display:flex;flex-direction:column;gap:14px}
+.q li{display:flex;flex-direction:column;gap:3px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.q li:last-child{border:0;padding:0}
+.q b{font-size:13.5px}
+.q span{color:var(--ink-2);font-size:13px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:13px}
+th{font:500 11px/1.3 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td.n,th.n{text-align:right}
+tr.on td{background:var(--accent-soft)}
+td input{padding:5px 7px;min-width:70px}
+td input.mes{min-width:110px}
+.up{color:var(--warn-ink)}.up.c{color:var(--crit-ink)}.dn{color:var(--ok-ink)}
+.mon{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:12px 0}
+@media(max-width:700px){.mon{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.mm span{display:block;font:500 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.mm b{font-size:22px;font-variant-numeric:tabular-nums}
+.callout{border-radius:8px;padding:12px 14px;border:1px solid var(--line)}
+.callout.ok{background:var(--ok-soft);border-color:var(--ok)}
+.callout.warn{background:var(--warn-soft);border-color:var(--warn)}
+.callout.crit{background:var(--crit-soft);border-color:var(--crit)}
+.callout b{display:block;margin-bottom:2px}
+.note{font-size:12.5px;color:var(--ink-3);margin-top:10px}
+.crit-list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.crit-list li{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2)}
+.th{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:13px}
+.th input{width:78px}
+.gauge{max-width:340px;margin:0 auto}
+.gauge svg{width:100%;height:auto;display:block}
+.g-seg{fill:none;stroke-width:16}
+.g-seg.ok{stroke:var(--ok)}.g-seg.warn{stroke:var(--warn)}.g-seg.crit{stroke:var(--crit)}
+.g-needle{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.g-hub{fill:var(--ink)}
+.g-tick{font:500 10px var(--mono);fill:var(--ink-3)}
+.gv{text-align:center;font-size:44px;font-weight:700;line-height:1;margin-top:-6px;font-variant-numeric:tabular-nums}
+.gv span{font-size:15px;color:var(--ink-3);font-weight:500}
+.gc{text-align:center;margin-top:8px}
+.bar-in{display:inline-block;height:8px;border-radius:99px;background:var(--crit);vertical-align:middle}
+.rec{display:flex;flex-direction:column;gap:10px}
+.rec-h{display:flex;gap:6px;flex-wrap:wrap}
+.rec h3{font-size:15px;line-height:1.35;text-wrap:balance}
+.rec dt{font:500 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:8px}
+.rec dd{color:var(--ink-2);font-size:13px}
+.rec .btn{align-self:flex-start;margin-top:4px}
+.plan li{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.plan li:last-child{border:0}
+.plan select{width:auto}
+.formula{font:500 15px/1.5 var(--mono);background:var(--surface-2);border-radius:8px;padding:12px 14px;overflow-x:auto}
+.sim-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px}
+.sim-out>div{background:var(--surface-2);border-radius:8px;padding:12px}
+.sim-out span{display:block;font:500 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.sim-out b{font-size:22px;font-variant-numeric:tabular-nums}
+.sim-out .good b{color:var(--ok-ink)}
+.tag-sim{display:inline-block;font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--accent-soft);color:var(--accent);border-radius:4px;padding:3px 7px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row .fl{flex:1 1 150px}
+.err{color:var(--crit-ink);font-size:13px;margin-top:6px}
+.okmsg{color:var(--ok-ink);font-size:13px;margin-top:6px}
+.insight.mute{border-left-color:var(--ink-3)}
+.callout.mute{background:var(--surface-2);border-color:var(--ink-3)}
+.histbar{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+.histbar .pill{flex:none}
+.fonte{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;margin-top:6px;font-size:12px}
+.fonte .ks{flex:1 1 220px;min-width:0}
+.obs-view{margin-top:10px;padding:10px 12px;background:var(--surface-2);border-radius:8px;display:flex;flex-direction:column;gap:6px}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.steps span{font-size:12px;padding:3px 10px;border-radius:999px;border:1px dashed var(--ink-3);color:var(--ink-3)}
+.steps span.on{border-style:solid;border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:600}
+.msgs{margin:6px 0 0;padding-left:18px;list-style:disc;font-size:13px;color:var(--ink-2)}
+.msgs li{margin:2px 0}
+pre.ex{font:12px/1.5 var(--mono);background:var(--surface-2);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:10px 0 0}
+.demo{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:16px}
+.demo h2{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.demo h2 .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font:600 13px var(--mono);flex:none}
+.hyp{margin:8px 0 0;padding-left:18px;list-style:disc;color:var(--ink-2)}
+.plan input[type=text]{margin-top:2px;min-width:200px}
+td input[aria-invalid="true"],input[aria-invalid="true"]{border-color:var(--crit);outline-color:var(--crit)}
+.ks{color:var(--ink-2)}
+.kl,.eyebrow,th,.fl>label,.fl>span.lb{color:var(--ink-2)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---- ano, validação, plano de ações, conta real ---- */
+.vlist{display:flex;flex-direction:column;gap:10px}
+.vlist li{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2)}
+.vlist .pill{flex:none;margin-top:1px}
+.btn.confirm{background:var(--crit);border-color:var(--crit);color:#fff}
+.lnk.confirm{color:var(--crit-ink)}
+#errbar p{margin:0}
+.callout.mute{background:var(--surface-2);border-color:var(--ink-3)}
+.insight.mute{border-left-color:var(--ink-3)}
+td input.ano{min-width:74px}
+.acoes{display:flex;flex-direction:column;gap:16px}
+.acao{display:flex;flex-direction:column;gap:12px;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.acoes li.acao{padding:14px}
+.acao-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.acao-h>span{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.acao-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.medido{border:1px dashed var(--ok);border-radius:8px;padding:10px 12px;background:var(--ok-soft)}
+.medido .kl{color:var(--ok-ink)}
+.medido .acao-grid{margin-top:8px}
+.pcalc{display:flex;flex-direction:column;gap:6px}
+.antdep{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--surface-2)}
+.col-est{box-shadow:inset 3px 0 0 var(--accent)}
+.col-real{box-shadow:inset 3px 0 0 var(--ink)}
+.col-dif{box-shadow:inset 3px 0 0 var(--warn)}
+th.col-est,th.col-real,th.col-dif{box-shadow:none;border-bottom:2px solid var(--accent)}
+th.col-real{border-bottom-color:var(--ink)}th.col-dif{border-bottom-color:var(--warn)}
+.mm.col-est,.mm.col-real,.mm.col-dif{padding-left:10px}
+.tag-med{display:inline-block;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;background:var(--ok-soft);color:var(--ok-ink);border-radius:4px;padding:3px 7px}
+/* ---- relatório ---- */
+.rel-doc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:28px max(18px,4%);max-width:960px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:22px;min-width:0}
+.rel-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;border-bottom:2px solid var(--accent);padding-bottom:14px}
+.rel-brand{display:flex;align-items:center;gap:10px}.rel-brand svg{width:36px;height:36px}
+.rel-brand b{display:block;font-size:18px}.rel-brand small{color:var(--ink-3);font-size:12.5px}
+.rel-data{color:var(--ink-3);font-size:12.5px}
+.rel-aviso{background:var(--warn-soft);color:var(--warn-ink);border:1px solid var(--warn);border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:500}
+.rel-sec{display:flex;flex-direction:column;gap:10px;min-width:0}
+.rel-sec h2{font-size:15px;border-bottom:1px solid var(--line);padding-bottom:6px;color:var(--accent)}
+.rel-sec .tw{min-width:0}
+.rel-sec table{font-size:12.5px}
+.rel-kv th{width:34%;font-size:11px}
+.rel-kv th,.rel-kv td{white-space:normal;vertical-align:top}
+.rel-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.rel-kpi{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;background:var(--surface-2)}
+.rel-kpi span{font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.rel-kpi b{font-size:19px;font-variant-numeric:tabular-nums}.rel-kpi small{color:var(--ink-3);font-size:11.5px}
+.rel-svg{width:100%;height:auto;display:block}
+.rel-nota{color:var(--ink-3);font-size:12px}
+.rel-vazio{color:var(--ink-3);font-style:italic}
+.rel-lista{list-style:disc;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.rel-hist{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start;font-size:12.5px}
+.rel-doc .tw{overflow-x:auto}
+.rel-sec>table,.rel-sec>.rel-svg{display:block;overflow-x:auto;max-width:100%}
+@media print{
+  :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+    --bg:#FFFFFF;--surface:#FFFFFF;--surface-2:#F1F5FA;--line:#CBD5E1;--ink:#0E2038;--ink-2:#334155;--ink-3:#5B6B80;--accent:#1D5FD0;--accent-soft:#E3EDFB;
+    --ok:#1B8A5A;--ok-soft:#E0F3EA;--ok-ink:#116B43;--warn:#D08A00;--warn-soft:#FBF0D6;--warn-ink:#7D4D00;--crit:#C93A3A;--crit-soft:#FBE4E2;--crit-ink:#A22525;color-scheme:light}
+  @page{margin:14mm}
+  html,body{background:#fff}
+  .side,.banner,.filters,.histbar,.top,.no-print,#errbar{display:none!important}
+  .app{display:block}.main{padding:0!important;gap:0}
+  .rel-doc{border:0;padding:0;max-width:none;gap:16px}
+  .rel-sec{break-inside:avoid-page}
+  .rel-sec table,.rel-sec>table{display:table;overflow:visible}
+  .rel-sec tr{break-inside:avoid}
+  .rel-head{break-after:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+<div class="app">
+<aside class="side"><div class="side-in">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2F6FDB"/><path d="M17.5 6 9 18h6l-1.5 8L23 13.5h-6z" fill="#fff"/></svg>
+    <div><b>Energia em Foco</b><small>Gestão de consumo energético</small></div>
+  </div>
+  <nav id="nav" aria-label="Seções do painel"></nav>
+  <p class="side-foot">Protótipo do projeto escolar <em>Custo de Energia nas Empresas</em>. Foco inicial: escolas e pequenas empresas.</p>
+</div></aside>
+
+<main class="main">
+  <div class="banner" id="banner"></div>
+  <header class="top">
+    <p class="eyebrow" id="crumb"></p>
+    <h1 id="h1"></h1>
+    <p class="lead" id="sub"></p>
+  </header>
+
+  <div class="card filters" aria-label="Filtros globais">
+    <div class="fl wide">
+      <span class="lb">Meses analisados</span>
+      <div class="chips" id="chips"></div>
+      <div class="chips">
+        <button class="chip pre" data-p="all">Todos</button>
+        <button class="chip pre" data-p="first3">Primeiros 3</button>
+        <button class="chip pre" data-p="last3">Últimos 3</button>
+        <button class="chip pre" data-p="foco">Só o mês em foco</button>
+      </div>
+    </div>
+    <div class="fl"><label for="f-setor">Setor</label><select id="f-setor"></select></div>
+    <div class="fl"><label for="f-foco">Mês em foco</label><select id="f-foco"></select></div>
+    <div class="fl">
+      <label for="f-tarifa">Tarifa (R$/kWh)</label>
+      <input type="number" id="f-tarifa" data-bind="tarifa" step="0.01" min="0">
+      <label class="chk"><input type="checkbox" id="f-usarbase"> Usar a tarifa de cada mês da base</label>
+    </div>
+  </div>
+
+  <div class="histbar" id="histbar" role="status"></div>
+  <div class="callout crit" id="errbar" role="alert" hidden></div>
+
+  <section class="view" id="v-visao-geral" hidden>
+    <div id="insight"></div>
+    <div class="grid g-kpi" id="kpis" style="margin-top:16px"></div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card"><div class="ch"><h2>Consumo mensal no período</h2><p class="cs">A cor de cada barra mostra a classificação em relação à média histórica.</p></div><div class="cbox"><canvas id="c-ov"></canvas></div><div class="legend" id="lg-ov"></div></div>
+      <div class="card"><div class="ch"><h2>Três perguntas, três respostas</h2><p class="cs">O painel traduz os números em decisões.</p></div><ul class="q" id="tres"></ul></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-consumo" hidden>
+    <div class="grid g2">
+      <div class="card all"><div class="ch"><h2>Consumo mensal de energia</h2><p class="cs">Passe o cursor sobre uma barra para ver a variação e a classificação do mês.</p></div><div class="cbox tall"><canvas id="c-cons"></canvas></div><div class="legend" id="lg-cons"></div></div>
+      <div class="card"><div class="ch"><h2>Evolução dos custos</h2><p class="cs">Custo estimado = kWh × tarifa.</p></div><div class="cbox"><canvas id="c-custo"></canvas></div></div>
+      <div class="card"><div class="ch"><h2>Consumo por setor</h2><p class="cs">Todos os setores, nos meses selecionados.</p><p class="fonte" id="stack-fonte"></p></div><div class="cbox"><canvas id="c-stack"></canvas></div></div>
+      <div class="card all">
+        <div class="ch"><h2>Comparação entre períodos</h2><p class="cs">Escolha dois períodos. Os meses são alinhados pela posição (mês 1 com mês 1, e assim por diante).</p></div>
+        <div class="row">
+          <div class="fl"><label for="cA1">Período A: de</label><select id="cA1"></select></div>
+          <div class="fl"><label for="cA2">até</label><select id="cA2"></select></div>
+          <div class="fl"><label for="cB1">Período B: de</label><select id="cB1"></select></div>
+          <div class="fl"><label for="cB2">até</label><select id="cB2"></select></div>
+        </div>
+        <div class="grid g2" style="margin-top:14px"><div class="cbox"><canvas id="c-cmp"></canvas></div><div class="tw" id="cmp-table"></div></div>
+      </div>
+      <div class="card all"><div class="ch"><h2>Relação entre consumo (kWh) e custo (R$)</h2><p class="cs">Cada ponto é um mês. Com tarifa única, os pontos ficam sobre a reta cuja inclinação é a tarifa.</p></div><div class="cbox"><canvas id="c-scat"></canvas></div></div>
+      <div class="card all" id="anual-card">
+        <div class="ch"><h2>Comparação anual</h2><p class="cs">Compara o mesmo mês em anos diferentes e os períodos anuais. Usa todos os registros com ano e dados, independentemente do filtro de meses. O filtro de setor continua valendo.</p></div>
+        <p class="note" id="anual-status" style="margin:0 0 12px"></p>
+        <div class="grid g2">
+          <div><div class="fl" style="max-width:260px"><label for="cmp-mes">Mesmo mês em anos diferentes</label><select id="cmp-mes"></select></div><div class="cbox" style="height:230px;margin-top:10px"><canvas id="c-mesmo"></canvas></div><div class="tw" id="mesmo-table" style="margin-top:10px"></div></div>
+          <div><p class="kl" style="margin-bottom:6px">Períodos anuais</p><div class="cbox" style="height:230px"><canvas id="c-anos"></canvas></div><div class="tw" id="anos-table" style="margin-top:10px"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="v-monitoramento" hidden>
+    <div class="card" id="mon-status"></div>
+    <div class="card" id="mon-ctx" style="margin-top:16px">
+      <div class="ch"><h2 id="ctx-title">Contexto e observações</h2><p class="cs">Mudanças de rotina podem explicar um aumento. Registre o que se sabe sobre o mês em foco: o registro fica salvo neste navegador e entra nas recomendações.</p></div>
+      <div class="fl"><span class="lb">Situações que podem explicar a variação</span><div class="chips" id="ctx-chips"></div></div>
+      <div class="row" style="margin-top:12px"><div class="fl" style="flex:1 1 260px"><label for="ctx-inv">Situação da investigação (decidida pelo responsável)</label><select id="ctx-inv"></select></div></div>
+      <div class="fl" style="margin-top:12px"><label for="ctx-obs">Observação ou justificativa</label><textarea id="ctx-obs" placeholder="Ex.: Em abril houve semana de provas com turno estendido. Equipe vai comparar as escalas de uso do ar-condicionado."></textarea></div>
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card" id="mon-legend">
+        <div class="ch"><h2>Critérios de classificação</h2><p class="cs">Variação do consumo do mês em relação à média histórica (média dos demais meses da base).</p></div>
+        <ul class="crit-list">
+          <li><span class="pill ok">Normal</span><span>Abaixo de <b data-th="atencao"></b> acima da média: consumo dentro do padrão esperado.</span></li>
+          <li><span class="pill warn">Atenção</span><span>De <b data-th="atencao"></b> até menos de <b data-th="critico"></b> acima da média: variação relevante que merece investigação.</span></li>
+          <li><span class="pill crit">Crítico</span><span><b data-th="critico"></b> ou mais acima da média: variação elevada que exige análise prioritária.</span></li>
+        </ul>
+        <div class="th"><label for="th-at">Atenção a partir de</label><input type="number" id="th-at" min="1" max="200" step="1"><span>%</span><label for="th-cr">Crítico a partir de</label><input type="number" id="th-cr" min="2" max="300" step="1"><span>%</span></div>
+        <p class="note">Um aumento fora do padrão não prova desperdício. Ele indica onde investigar: pode haver mais aulas, eventos, obras ou calor, por exemplo.</p>
+      </div>
+      <div class="card"><div class="ch"><h2>Setores no mês em foco</h2><p class="cs">Consumo do setor no mês em foco contra a média histórica do próprio setor.</p><p class="fonte" id="setor-fonte"></p></div><div class="cbox"><canvas id="c-setor"></canvas></div><div class="tw" id="setor-table" style="margin-top:10px"></div></div>
+    </div>
+    <div class="card" style="margin-top:16px"><div class="ch"><h2>Histórico mês a mês</h2><p class="cs">Use “Analisar” para trocar o mês em foco.</p></div><div class="tw" id="mon-table"></div></div>
+  </section>
+
+  <section class="view" id="v-indice" hidden>
+    <div class="grid g2">
+      <div class="card"><div class="ch"><h2>Índice de Atenção Energética</h2><p class="cs">Quanto menor o índice, maior a atenção necessária.</p></div><div id="idx-gauge"></div></div>
+      <div class="card"><div class="ch"><h2>Como o índice do mês foi calculado</h2><p class="cs">Parte de 100 pontos e desconta conforme cada fator.</p></div><div class="tw" id="idx-fatores"></div></div>
+      <div class="card"><div class="ch"><h2>Índice mês a mês</h2></div><div class="cbox"><canvas id="c-idx"></canvas></div></div>
+      <div class="card">
+        <div class="ch"><h2>Leitura e limites</h2></div>
+        <ul class="crit-list">
+          <li><span class="pill ok">80–100</span><span>Situação controlada.</span></li>
+          <li><span class="pill warn">50–79</span><span>Atenção necessária.</span></li>
+          <li><span class="pill crit">0–49</span><span>Situação crítica.</span></li>
+        </ul>
+        <p class="note"><b>Como é calculado:</b> cada fator é uma variação percentual. Ela é dividida por 80% (no máximo 1) e multiplicada pelo peso do fator. O índice é 100 menos a soma desses descontos. Fatores que caem ou ficam estáveis não descontam nada.</p>
+        <p class="note"><b>O que o índice não diz:</b> ele mede o quanto o consumo se afastou do histórico, do mês anterior e da meta. Mais pessoas, eventos, horários ampliados ou equipamentos novos também reduzem o índice sem haver desperdício. Por isso, use-o para decidir onde olhar primeiro, e registre o contexto na aba Monitoramento. Os pesos e o limite de 80% são escolhas deste protótipo. É um indicador demonstrativo de atenção, e não uma métrica científica ou certificada.</p>
+        <div class="th"><label for="meta-idx">Meta mensal (kWh)</label><input type="number" id="meta-idx" min="1" step="50"><span>usada no fator “distância da meta”</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="v-financeiro" hidden>
+    <div class="card">
+      <div class="ch"><h2>Como o custo é estimado</h2></div>
+      <p class="formula">Custo estimado = consumo em kWh × tarifa por kWh</p>
+      <p style="margin-top:10px" id="fin-ex"></p>
+      <div class="row" style="margin-top:12px"><div class="fl" style="max-width:220px"><label for="fin-tarifa">Tarifa configurável (R$/kWh)</label><input type="number" id="fin-tarifa" data-bind="tarifa" step="0.01" min="0"></div></div>
+      <p class="note">A tarifa é um parâmetro que você escolhe. O cálculo é simplificado e pode não incluir todos os componentes de uma conta real, como impostos, bandeiras tarifárias, demanda contratada e taxas.</p>
+    </div>
+    <div class="grid g-kpi" id="fin-kpis" style="margin-top:16px"></div>
+    <div class="card" style="margin-top:16px">
+      <div class="ch"><h2>Orçamento de energia</h2><p class="cs">Compare o custo estimado com o orçamento mensal que a instituição reservou para energia. Com um setor selecionado, o orçamento é proporcional à participação histórica dele.</p></div>
+      <div class="grid g2">
+        <div><div class="row"><div class="fl" style="max-width:240px"><label for="orc-in">Orçamento mensal (R$)</label><input type="number" id="orc-in" min="1" step="50"></div></div><div id="orc-res" style="margin-top:12px"></div></div>
+        <div><div class="cbox"><canvas id="c-orc"></canvas></div><div class="legend"><span><i style="background:var(--ok)"></i>Dentro do orçamento</span><span><i style="background:var(--warn)"></i>De 90% a 100%</span><span><i style="background:var(--crit)"></i>Acima do orçamento</span></div></div>
+      </div>
+    </div>
+    <div class="card" id="real-card" style="margin-top:16px">
+      <div class="ch"><h2>Custo estimado × valor real da conta</h2><p class="cs">Três valores diferentes: o custo estimado pelo consumo (kWh × tarifa), o valor real que você informou da conta e a diferença entre eles. Informe o valor real na aba <a href="#dados">Dados</a>.</p></div>
+      <div id="real-res"></div>
+      <div class="cbox" style="height:250px;margin-top:8px"><canvas id="c-real"></canvas></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Custo estimado (kWh × tarifa)</span><span><i style="background:var(--ink)"></i>Valor real informado na conta</span></div>
+      <div class="tw" id="real-table" style="margin-top:12px"></div>
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card"><div class="ch"><h2>Custo mensal e acumulado</h2></div><div class="cbox"><canvas id="c-fin"></canvas></div></div>
+      <div class="card">
+        <div class="ch"><h2>Comparação entre cenários</h2><p class="cs"><span class="tag-sim">Simulação</span> Não são economias realizadas.</p></div>
+        <div class="row"><div class="fl" style="max-width:200px"><label for="fin-reaj">Reajuste de tarifa simulado (%)</label><input type="number" id="fin-reaj" min="0" max="100" step="1"></div></div>
+        <div class="cbox" style="height:210px;margin-top:10px"><canvas id="c-cen"></canvas></div>
+      </div>
+      <div class="card all"><div class="tw" id="fin-cen"></div></div>
+      <div class="card all"><div class="ch"><h2>Custo mês a mês</h2></div><div class="tw" id="fin-table"></div></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-melhorias" hidden>
+    <p class="lead" id="rec-sum" style="margin-bottom:12px"></p>
+    <div class="grid g2" id="rec-list"></div>
+    <div class="card" style="margin-top:16px"><div class="ch"><h2>Plano de ação</h2><p class="cs">Acompanhe responsável, prazo, custo e economia. A economia esperada é projeção; só o resultado medido e informado conta como alcançado.</p></div>
+      <div id="plano-resumo"></div>
+      <div id="plano"></div>
+      <div class="row" style="margin-top:14px"><div class="fl" style="flex:1 1 280px"><label for="plano-novo">Nova ação própria</label><input type="text" id="plano-novo" placeholder="Ex.: Trocar lâmpadas do bloco B por LED"></div><button class="btn ghost" data-act="plano-add">Adicionar ação</button></div>
+      <p id="plano-msg" class="err" role="status"></p></div>
+  </section>
+
+  <section class="view" id="v-simulador" hidden>
+    <div class="grid g2">
+      <div class="card">
+        <div class="ch"><h2>Quanto podemos reduzir?</h2><p class="cs"><span class="tag-sim">Simulação</span> Os valores abaixo são estimativas, não economias já realizadas.</p></div>
+        <div class="fl"><label for="sim-base">Base de consumo</label>
+          <select id="sim-base"><option value="foco">Mês em foco</option><option value="media">Média mensal dos meses selecionados</option><option value="custom">Valor informado</option></select></div>
+        <div class="fl" id="sim-custom-w" style="margin-top:10px" hidden><label for="sim-custom">Consumo informado (kWh/mês)</label><input type="number" id="sim-custom" min="0" step="100"></div>
+        <div class="fl" style="margin-top:14px"><label for="sim-pct">Redução desejada: <b id="sim-pct-v"></b></label>
+          <input type="range" id="sim-pct" min="0" max="60" step="1">
+          <input type="number" id="sim-pct-n" min="0" max="100" step="0.5" style="max-width:120px"></div>
+        <div class="fl" style="margin-top:10px;max-width:220px"><label for="sim-tarifa">Tarifa (R$/kWh)</label><input type="number" id="sim-tarifa" data-bind="tarifa" step="0.01" min="0"></div>
+        <div class="chips" style="margin-top:14px" id="sim-presets"></div>
+      </div>
+      <div class="card"><div class="ch"><h2>Antes e depois da redução</h2></div><div class="cbox"><canvas id="c-sim"></canvas></div></div>
+      <div class="card all"><div class="ch"><h2>Resultado da simulação</h2></div><div id="sim-res"></div></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-relatorio" hidden>
+    <div class="card no-print">
+      <div class="ch"><h2>Relatório de eficiência energética</h2><p class="cs">Reúne os dados do painel no período e no setor filtrados acima. Informações que não existem na base aparecem como “não informado”.</p></div>
+      <div class="row"><button class="btn" data-act="rel-copy">Copiar relatório como texto</button><button class="btn ghost" id="rel-print" data-act="rel-print" hidden>Imprimir ou salvar como PDF</button><span class="okmsg" id="rel-msg"></span></div>
+      <p class="note">Para imprimir ou salvar em PDF, use o comando de impressão do navegador (Ctrl+P ou Cmd+P). O relatório tem layout próprio de impressão, com cores claras e sem menus. O botão de imprimir só aparece quando a página está aberta diretamente no navegador.</p>
+    </div>
+    <article class="rel-doc" id="rel-doc"></article>
+  </section>
+
+  <section class="view" id="v-demo" hidden>
+    <div class="callout warn"><b>Dados fictícios</b><p>Este caso usa os seis meses simulados do protótipo, e não os seus dados. Nenhum valor representa uma instituição real.</p></div>
+    <ol class="demo" id="demo-steps"></ol>
+  </section>
+
+  <section class="view" id="v-dados" hidden>
+    <div id="dados-mig" hidden></div>
+    <div class="card" id="dados-valid" style="margin-bottom:16px"></div>
+    <div class="card">
+      <div class="ch"><h2>Base de dados do protótipo</h2><p class="cs">Os dados iniciais são fictícios e servem para demonstração. Cada registro tem mês e ano. Deixe um campo vazio quando não houver informação: o mês ou o setor fica “sem dados” e nunca vale zero. A conta real (R$) é opcional. Se o total da unidade ficar vazio e os cinco setores estiverem preenchidos, o total é a soma dos setores.</p></div>
+      <div class="tw"><table id="dados-tbl"></table></div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" data-act="add-mes">Adicionar mês</button>
+        <button class="btn ghost" data-act="reset-dados" data-conf="Confirmar: substituir pelos dados simulados">Restaurar dados simulados</button>
+      </div>
+      <div id="ano-tools" style="margin-top:14px"></div>
+      <div id="backup-box" style="margin-top:12px" hidden></div>
+      <p id="cfg-store" class="note"></p>
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card">
+        <div class="ch"><h2>Origem dos valores por setor</h2><p class="cs">A conta de energia costuma trazer só o total da unidade. Informe de onde vêm os valores por setor.</p></div>
+        <div class="fl"><label for="cfg-fonte">Os valores por setor vêm de</label><select id="cfg-fonte"><option value="simulado">Simulação (dados fictícios)</option><option value="estimado">Estimativa por metodologia</option><option value="medido">Medidores individuais</option></select></div>
+        <div class="fl" style="margin-top:10px"><label for="cfg-metodo">Metodologia usada para distribuir o consumo</label><textarea id="cfg-metodo" placeholder="Ex.: Percentuais definidos a partir da potência instalada de cada setor e das horas de uso semanais."></textarea></div>
+        <p id="cfg-aviso" style="margin-top:10px"></p>
+      </div>
+      <div class="card">
+        <div class="ch"><h2>Metas e orçamento</h2></div>
+        <div class="row"><div class="fl"><label for="meta-in">Meta mensal total (kWh)</label><input type="number" id="meta-in" min="1" step="50"></div>
+        <div class="fl"><label for="orc-in2">Orçamento mensal (R$)</label><input type="number" id="orc-in2" min="1" step="50"></div></div>
+        <p class="note">Com um setor selecionado, a meta e o orçamento são proporcionais à participação histórica dele no consumo total.</p>
+      </div>
+      <div class="card">
+        <div class="ch"><h2>Importar de planilha (CSV)</h2><p class="cs">Aceita CSV do Excel, com vírgula, ponto e vírgula ou tabulação. Números como 1.234,56 e 1234.56 são reconhecidos. Nada é importado antes da sua confirmação, e a importação substitui os dados atuais.</p></div>
+        <div class="fl"><label for="csv-file">Arquivo CSV</label><input type="file" id="csv-file" accept=".csv,.txt,text/csv,text/plain"></div>
+        <div class="fl" style="margin-top:10px"><label for="csv-in">Ou cole as linhas da planilha</label><textarea id="csv-in" placeholder="Mes;Ano;Tarifa;Total;Climatizacao;Iluminacao;Informatica;Administrativo;Outros;ContaReal"></textarea></div>
+        <div class="fl" style="margin-top:10px;max-width:260px"><label for="csv-ano">Ano das linhas sem ano (opcional)</label><input type="number" id="csv-ano" min="2000" max="2100" step="1" placeholder="Ex.: 2025"></div>
+        <div class="row" style="margin-top:10px"><button class="btn" data-act="csv-check">Verificar dados</button><button class="btn ghost" data-act="csv-ex">Usar exemplo</button><button class="btn" id="csv-confirm" data-act="csv-confirm" hidden>Confirmar importação</button></div>
+        <div id="csv-msg" style="margin-top:10px" role="status"></div>
+        <p class="note"><b>Formato esperado:</b> uma linha por mês, com cabeçalho. Colunas: Mes; Ano; Tarifa; Total; Climatização; Iluminação; Informática; Administrativo; Outros; ContaReal. Obrigatórios: Mes e Total (ou os cinco setores). O ano também pode vir no mês (Jan/2025). Planilhas antigas, sem ano, continuam aceitas: o painel avisa e você informa o ano. Células vazias viram “sem dados”.</p>
+        <pre class="ex">Mes;Ano;Tarifa;Total;Climatizacao;Iluminacao;Informatica;Administrativo;Outros;ContaReal
+Janeiro;2025;0,80;7800;2700;1900;1500;1100;600;6890,50
+Fevereiro;2025;0,80;8100;;;;;;</pre>
+      </div>
+      <div class="card">
+        <div class="ch"><h2>Exportar para planilha</h2><p class="cs">Copie o texto e cole no Excel ou Google Planilhas.</p></div>
+        <textarea id="csv-out" readonly aria-label="Dados em CSV"></textarea>
+        <div class="row" style="margin-top:10px"><button class="btn ghost" data-act="copy-csv">Copiar CSV</button><span class="okmsg" id="copy-msg"></span></div>
+      </div>
+    </div>
+  </section>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+'use strict';
+/* =====================================================================
+   1. DADOS (fictícios, para demonstração). Para usar dados reais, edite
+      DADOS_PADRAO ou use a aba "Dados" (editar, colar ou abrir CSV).
+      mes  = nome do mês; ano = ano do registro (null quando não informado).
+      total = consumo da unidade (o que a conta de energia informa).
+      conta = valor real da conta em R$ (opcional, informado pelo usuário).
+      setores = divisão opcional, simulada, estimada ou medida (ver CONFIG).
+   ===================================================================== */
+const SETORES=[
+  {id:'clim',nome:'Climatização'},
+  {id:'ilum',nome:'Iluminação'},
+  {id:'info',nome:'Informática e laboratórios'},
+  {id:'adm',nome:'Administrativo'},
+  {id:'outros',nome:'Outros usos'}
+];
+const CTX=[
+  {id:'pessoas',t:'Mais alunos ou funcionários'},
+  {id:'evento',t:'Evento realizado'},
+  {id:'horario',t:'Horário de funcionamento ampliado'},
+  {id:'equip',t:'Novos equipamentos instalados'},
+  {id:'rotina',t:'Alteração na rotina'},
+  {id:'sazonal',t:'Mudança sazonal (clima, férias)'}
+];
+const INV=[
+  {id:'',t:'Sem registro'},
+  {id:'analise',t:'Em investigação'},
+  {id:'justificada',t:'Variação justificada por mudança de rotina'},
+  {id:'confirmada',t:'Desperdício confirmado após inspeção'},
+  {id:'semcausa',t:'Investigada, sem causa identificada'}
+];
+const FONTES={
+  simulado:{t:'Setores simulados',c:'warn',d:'valores simulados (fictícios)',rot:'divisão simulada'},
+  estimado:{t:'Setores estimados',c:'mute',d:'estimativas, não medições',rot:'divisão estimada'},
+  medido:{t:'Setores medidos',c:'ok',d:'medidores individuais',rot:'medidores individuais'}
+};
+const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const ANO_MIN=2000,ANO_MAX=2100;
+const semAc=s=>String(s==null?'':s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+/* Lê "Janeiro", "jan/25", "Jan/2025", "Janeiro de 2025", "2025-01", "01/2025" ou "3". Devolve {mes:1..12|null, ano:inteiro|null}.
+   Só devolve o ano quando o mês foi reconhecido. Textos como "Novo mês" ou "Mês 3" não são reconhecidos. */
+function parseMesAno(txt){
+  let s=semAc(txt),ano=null,mes=null;
+  const y=s.match(/(?<!\d)((?:19|20)\d{2})(?!\d)/);
+  if(y){ano=+y[1];s=s.replace(y[0],' ');}
+  const toks=s.split(/[^a-z0-9]+/).filter(t=>t&&t!=='de');
+  for(const t of toks){
+    if(/^[a-z]{3,}$/.test(t)){const k=MESES.findIndex(n=>semAc(n).startsWith(t));if(k>=0){mes=k+1;break;}}
+  }
+  if(!mes&&toks.length===1&&/^\d{1,2}$/.test(toks[0])&&+toks[0]>=1&&+toks[0]<=12)mes=+toks[0];
+  if(!mes&&toks.length>1&&toks.every(t=>/^\d+$/.test(t))&&+toks[0]>=1&&+toks[0]<=12)mes=+toks[0];
+  if(mes&&ano==null){const y2=s.match(/[a-z]{3,}\s*[\/\-.]\s*(\d{2})\s*$/);if(y2)ano=2000+ +y2[1];}
+  return{mes,ano:mes?ano:null};
+}
+const anoOk=a=>Number.isInteger(a)&&a>=ANO_MIN&&a<=ANO_MAX;
+const mesNum=m=>parseMesAno(m.mes).mes;
+const keyMA=m=>{const n=mesNum(m);return anoOk(m.ano)&&n?m.ano*12+n-1:null;};
+const rot=m=>m?(anoOk(m.ano)?`${m.mes} ${m.ano}`:m.mes):'';
+const rotCurto=m=>m?(m.mes||'').slice(0,3)+(anoOk(m.ano)?'/'+String(m.ano).slice(2):''):'';
+const DADOS_PADRAO=[
+  {mes:'Janeiro',  ano:2025,tarifa:0.80,total:7800, setores:{clim:2700,ilum:1900,info:1500,adm:1100,outros:600}},
+  {mes:'Fevereiro',ano:2025,tarifa:0.80,total:8100, setores:{clim:2900,ilum:1900,info:1600,adm:1100,outros:600}},
+  {mes:'Março',    ano:2025,tarifa:0.80,total:8300, setores:{clim:3000,ilum:1950,info:1650,adm:1100,outros:600}},
+  {mes:'Abril',    ano:2025,tarifa:0.80,total:10700,setores:{clim:5100,ilum:2300,info:1700,adm:1000,outros:600}},
+  {mes:'Maio',     ano:2025,tarifa:0.80,total:8500, setores:{clim:3100,ilum:2000,info:1700,adm:1100,outros:600}},
+  {mes:'Junho',    ano:2025,tarifa:0.80,total:8200, setores:{clim:2900,ilum:1950,info:1650,adm:1100,outros:600}}
+];
+const METODO_PADRAO='Divisão fictícia criada apenas para demonstrar o recurso. Não corresponde a medições nem a uma estimativa real.';
+const CONFIG={
+  tarifaPadrao:0.80,metaMensalKwh:8500,orcamentoMensal:7000,limiares:{atencao:10,critico:40},
+  minHist:3,idealHist:12,
+  fonteSetores:'simulado',
+  metodoSetores:METODO_PADRAO
+};
+const IDX={sat:80,pesos:{hist:35,cons:20,custo:20,meta:25}};
+
+const clone=o=>JSON.parse(JSON.stringify(o));
+const isNum=v=>typeof v==='number'&&isFinite(v);
+/* Normaliza um registro. Nomes de mês reconhecidos viram o nome completo e um ano escrito no texto do mês é aproveitado (sem inventar nada). */
+function normMes(m){
+  const t=Number(m.tarifa);
+  let nome=String(m.mes==null?'':m.mes).trim(),ano=anoOk(Number(m.ano))&&m.ano!==null&&m.ano!==''?Math.trunc(Number(m.ano)):null;
+  const p=parseMesAno(nome);
+  if(p.mes){if(ano==null&&p.ano&&anoOk(p.ano))ano=p.ano;nome=MESES[p.mes-1];}
+  const o={mes:nome||'Mês sem nome',ano,tarifa:isFinite(t)&&t>=0&&m.tarifa!==null&&m.tarifa!==''?t:0.8,total:isNum(m.total)&&m.total>=0?m.total:null,
+    conta:isNum(m.conta)&&m.conta>=0?m.conta:null,setores:{},
+    ctx:Array.isArray(m.ctx)?m.ctx.filter(c=>CTX.some(x=>x.id===c)):[],inv:INV.some(i=>i.id===m.inv)?m.inv:'',obs:typeof m.obs==='string'?m.obs:''};
+  SETORES.forEach(s=>{const v=m.setores&&m.setores[s.id];o.setores[s.id]=isNum(v)&&v>=0?v:null;});
+  return o;
+}
+let DATA=clone(DADOS_PADRAO).map(normMes);
+const igualDemo=()=>{const f=a=>JSON.stringify(a.map(m=>({mes:m.mes,tarifa:m.tarifa,total:m.total,setores:m.setores})));return f(DATA)===f(DADOS_PADRAO);};
+
+/* =====================================================================
+   2. ARMAZENAMENTO LOCAL (versionado, com tratamento de erro)
+      v3 é a chave atual. As chaves v2 e v1 NUNCA são apagadas nem alteradas:
+      são lidas uma vez para migrar os dados. Antes de substituir dados, uma cópia
+      de segurança fica na chave de backup.
+   ===================================================================== */
+const LS3='energia-em-foco-v3',LS2='energia-em-foco-v2',LS1='energia-em-foco-v1',LSB='energia-em-foco-backup';
+let storageOk=true;
+function validData(d){return Array.isArray(d)&&d.length>=1&&d.length<=240&&d.every(m=>m&&typeof m.mes==='string'&&m.setores&&typeof m.setores==='object');}
+function lerSalvo(){
+  for(const [k,de] of [[LS3,'v3'],[LS2,'v2'],[LS1,'v1']]){
+    let raw=null;
+    try{raw=localStorage.getItem(k);}catch(e){storageOk=false;return null;}
+    if(!raw)continue;
+    try{
+      let s=JSON.parse(raw);
+      if(de==='v1'&&s)s={dados:s.dados,config:{meta:s.meta,lim:s.lim}};
+      if(s&&validData(s.dados)){s._de=de;return s;}
+      console.error('[Energia em Foco] Dados salvos em '+k+' têm formato inesperado e foram ignorados (não apagados).');
+    }catch(e){console.error('[Energia em Foco] Não foi possível ler '+k+':',e);}
+  }
+  return null;
+}
+const SAVED=lerSalvo();
+const MIGRADO=!!(SAVED&&SAVED._de!=='v3');
+let AVISO_MIG=SAVED?(SAVED._de==='v3'?(SAVED.mig||null):{de:SAVED._de,visto:false}):null;
+if(SAVED){
+  DATA=SAVED.dados.map(normMes);
+  const c=SAVED.config||{};
+  if(c.meta>0)CONFIG.metaMensalKwh=c.meta;
+  if(c.orc>0)CONFIG.orcamentoMensal=c.orc;
+  if(c.lim&&c.lim.atencao>0&&c.lim.critico>c.lim.atencao)CONFIG.limiares={atencao:c.lim.atencao,critico:c.lim.critico};
+  if(FONTES[c.fonte])CONFIG.fonteSetores=c.fonte;
+  if(typeof c.metodo==='string')CONFIG.metodoSetores=c.metodo;
+  /* dados antigos que ainda são o conjunto demonstrativo recebem o ano do demonstrativo (2025); dados do usuário ficam sem ano até ele informar */
+  if(MIGRADO&&igualDemo())DATA.forEach(m=>{m.ano=2025;});
+}
+/* =====================================================================
+   3. UTILIDADES
+   ===================================================================== */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const nf=d=>new Intl.NumberFormat('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const f0=nf(0),f1=nf(1),f2=nf(2);
+const kwhF=n=>isNum(n)?f0.format(Math.round(n)||0)+' kWh':'sem dados';
+const brl=n=>isNum(n)?'R$ '+f0.format(Math.round(n)||0):'—';
+const brl2=n=>isNum(n)?'R$ '+f2.format(n):'—';
+const pc=n=>isNum(n)?(Math.abs(n)<0.05?'':(n>0?'+':'−'))+f1.format(Math.abs(n))+'%':'—';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const nm=i=>esc(DATA[i]?rot(DATA[i]):'');
+const ab=i=>DATA[i]?rotCurto(DATA[i]):'';
+const nomeSetor=id=>id==='todos'?'Todos os setores':(SETORES.find(s=>s.id===id)||{nome:id}).nome;
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const alpha=(v,a)=>{const h=css(v).replace('#','');const n=parseInt(h.length===3?h.replace(/./g,'$&$&'):h,16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;};
+const CLS={normal:{t:'Normal',c:'ok'},atencao:{t:'Atenção',c:'warn'},critico:{t:'Crítico',c:'crit'},indef:{t:'Indefinido',c:'mute'}};
+const pill=c=>`<span class="pill ${CLS[c].c}">${CLS[c].t}</span>`;
+const clsColor=c=>css(c==='indef'?'--ink-3':'--'+CLS[c].c);
+const fora=c=>c==='atencao'||c==='critico';
+const idxCls=v=>v>=80?{t:'Situação controlada',c:'ok'}:v>=50?{t:'Atenção necessária',c:'warn'}:{t:'Situação crítica',c:'crit'};
+const classificar=d=>d==null?'indef':d>=CONFIG.limiares.critico?'critico':d>=CONFIG.limiares.atencao?'atencao':'normal';
+const fonteBadge=()=>`<span class="pill ${FONTES[CONFIG.fonteSetores].c}">${FONTES[CONFIG.fonteSetores].t}</span>`;
+function notaSetores(){
+  return `A conta de energia costuma informar só o consumo total da unidade. A divisão por setor depende de medidores individuais ou de uma metodologia de estimativa. Origem dos valores por setor: <b>${FONTES[CONFIG.fonteSetores].d}</b>. Metodologia registrada: ${esc(CONFIG.metodoSetores||'não informada')}`;
+}
+const invTxt=m=>(INV.find(i=>i.id===m.inv)||INV[0]).t;
+/* Converte texto em número aceitando "1.234,56", "1,234.56", "7.800", "0,80", "0.8" e "R$ 1.200". NaN quando inválido. */
+function pnum(s){
+  s=String(s==null?'':s).trim().replace(/\s/g,'').replace(/^R\$/i,'').replace(/kwh$/i,'');
+  if(!s||!/^[+-]?[\d.,]+$/.test(s))return NaN;
+  const lc=s.lastIndexOf(','),ld=s.lastIndexOf('.');
+  if(lc>-1&&ld>-1){s=lc>ld?s.replace(/\./g,'').replace(',','.'):s.replace(/,/g,'');}
+  else if(lc>-1){s=(s.match(/,/g)||[]).length>1?s.replace(/,/g,''):s.replace(',','.');}
+  else if(ld>-1){if((s.match(/\./g)||[]).length>1||/^[+-]?[1-9]\d{0,2}\.\d{3}$/.test(s))s=s.replace(/\./g,'');}
+  const n=Number(s);return isFinite(n)?n:NaN;
+}
+
+/* =====================================================================
+   4. ESTADO E CÁLCULOS
+   ===================================================================== */
+const state={meses:new Set(DATA.map((_,i)=>i)),setor:'todos',foco:0,tarifa:CONFIG.tarifaPadrao,usarBase:false,
+  view:'visao-geral',cmpA:[0,0],cmpB:[0,0],cmpMes:0,reaj:10,simBase:'foco',simCustom:10000,simPct:15,
+  plano:{},demo:{obs:'',reg:false,status:'A fazer'}};
+const STATUS_PLANO=['A fazer','Em andamento','Concluída'];
+const nnull=v=>(v===null||v===undefined||v==='')?null:(isNum(Number(v))&&Number(v)>=0?Number(v):null);
+const dstr=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)?v:'';
+/* Ação do plano. Campos novos são opcionais; 'nota' (versão anterior) vira 'obs'. Economia esperada é projeção; economia alcançada é resultado informado. */
+function normPlano(p){
+  if(!p||typeof p.titulo!=='string')return null;
+  return{titulo:p.titulo,status:STATUS_PLANO.includes(p.status)?p.status:'A fazer',resp:typeof p.resp==='string'?p.resp:'',inicio:dstr(p.inicio),prazo:dstr(p.prazo),
+    custo:nnull(p.custo),ekwh:nnull(p.ekwh),ebrl:nnull(p.ebrl),rkwh:nnull(p.rkwh),rbrl:nnull(p.rbrl),obs:typeof p.obs==='string'?p.obs:(typeof p.nota==='string'?p.nota:'')};
+}
+const novoPlano=t=>normPlano({titulo:t,status:'A fazer'});
+(function aplicarSalvo(){
+  if(!SAVED)return;
+  const u=SAVED.ui||{};
+  if(isNum(u.tarifa)&&u.tarifa>=0)state.tarifa=u.tarifa;
+  if(typeof u.usarBase==='boolean')state.usarBase=u.usarBase;
+  if(u.setor==='todos'||SETORES.some(s=>s.id===u.setor))state.setor=u.setor;
+  if(Number.isInteger(u.foco))state.foco=u.foco;
+  if(Array.isArray(u.meses)){const m=u.meses.filter(i=>Number.isInteger(i)&&i>=0&&i<DATA.length);if(m.length)state.meses=new Set(m);}
+  if(isNum(u.reaj)&&u.reaj>=0)state.reaj=u.reaj;
+  if(['foco','media','custom'].includes(u.simBase))state.simBase=u.simBase;
+  if(isNum(u.simCustom)&&u.simCustom>=0)state.simCustom=u.simCustom;
+  if(isNum(u.simPct))state.simPct=clamp(u.simPct,0,100);
+  if(SAVED.plano&&typeof SAVED.plano==='object'){
+    Object.keys(SAVED.plano).forEach(k=>{const p=normPlano(SAVED.plano[k]);if(p)state.plano[k]=p;});
+  }
+  if(SAVED.demo&&typeof SAVED.demo==='object')state.demo={obs:String(SAVED.demo.obs||''),reg:!!SAVED.demo.reg,status:['A fazer','Em andamento','Concluída'].includes(SAVED.demo.status)?SAVED.demo.status:'A fazer'};
+})();
+function salvar(){
+  try{
+    localStorage.setItem(LS3,JSON.stringify({v:3,dados:DATA,mig:AVISO_MIG||undefined,
+      config:{meta:CONFIG.metaMensalKwh,orc:CONFIG.orcamentoMensal,lim:CONFIG.limiares,fonte:CONFIG.fonteSetores,metodo:CONFIG.metodoSetores},
+      ui:{tarifa:state.tarifa,usarBase:state.usarBase,setor:state.setor,foco:state.foco,meses:[...state.meses],reaj:state.reaj,simBase:state.simBase,simCustom:state.simCustom,simPct:state.simPct},
+      plano:state.plano,demo:state.demo}));
+    storageOk=true;
+  }catch(e){storageOk=false;}
+}
+
+function totalMes(m){if(isNum(m.total))return m.total;const v=SETORES.map(s=>m.setores[s.id]);return v.every(isNum)?sum(v):null;}
+function somaSetores(m){const v=SETORES.map(s=>m.setores[s.id]);return v.every(isNum)?sum(v):null;}
+function kwhMes(m){return state.setor==='todos'?totalMes(m):(isNum(m.setores[state.setor])?m.setores[state.setor]:null);}
+function tarMes(m){return state.usarBase?(+m.tarifa||0):state.tarifa;}
+function metaAtual(){
+  if(state.setor==='todos')return CONFIG.metaMensalKwh;
+  let t=0,p=0;DATA.forEach(m=>{const a=totalMes(m),b=m.setores[state.setor];if(isNum(a)&&isNum(b)){t+=a;p+=b;}});
+  return t?CONFIG.metaMensalKwh*p/t:0;
+}
+function mediaOutros(vals,i){const o=vals.filter((v,j)=>j!==i&&isNum(v));return o.length?sum(o)/o.length:null;}
+function defaultCmp(){const n=DATA.length,h=Math.max(1,Math.floor(n/2));state.cmpA=[0,h-1];state.cmpB=[Math.min(h,n-1),n-1];}
+function norm(){
+  const n=DATA.length;
+  state.meses=new Set([...state.meses].filter(i=>i<n));
+  if(!state.meses.size)DATA.forEach((_,i)=>state.meses.add(i));
+  if(state.foco>=n||state.foco<0)state.foco=n-1;
+  ['cmpA','cmpB'].forEach(k=>{state[k]=state[k].map(i=>clamp(i,0,n-1));if(state[k][0]>state[k][1])state[k][1]=state[k][0];});
+}
+function maiorDesvioIdx(){
+  const kw=DATA.map(totalMes);let best=0,bd=-1e9;
+  kw.forEach((v,i)=>{if(!isNum(v))return;const h=mediaOutros(kw,i);const d=h>0?v/h-1:-1e9;if(d>bd){bd=d;best=i;}});
+  return best;
+}
+/* Cobertura do histórico: 12 registros não significam um ano. Só há análise anual com 12 meses distintos do calendário e anos informados. */
+function coberturaHist(){
+  const regs=DATA.map((m,i)=>({m,i,t:totalMes(m)})).filter(r=>isNum(r.t));
+  const semAno=regs.filter(r=>!anoOk(r.m.ano)).length,semMes=regs.filter(r=>!mesNum(r.m)).length;
+  const chaves=regs.map(r=>keyMA(r.m)).filter(k=>k!==null),unicas=new Set(chaves);
+  const cal=new Set(regs.map(r=>mesNum(r.m)).filter(Boolean));
+  const anos=[...new Set(regs.filter(r=>anoOk(r.m.ano)).map(r=>r.m.ano))].sort((a,b)=>a-b);
+  const ord=[...unicas].sort((a,b)=>a-b);let run=0,seqMax=0;ord.forEach((k,j)=>{run=j&&k===ord[j-1]+1?run+1:1;if(run>seqMax)seqMax=run;});
+  return{n:regs.length,semAno,semMes,dup:chaves.length-unicas.size,distintos:cal.size,anos,seqMax,
+    anual:semAno===0&&semMes===0&&chaves.length===unicas.size&&cal.size===12&&regs.length>=CONFIG.idealHist};
+}
+function compute(){
+  const A=DATA.map((m,i)=>{const kwh=kwhMes(m),tarifa=tarMes(m),sem=!isNum(kwh);
+    const custo=sem?null:kwh*tarifa,real=state.setor==='todos'&&isNum(m.conta)?m.conta:null;
+    return{i,mes:rot(m),mesNome:m.mes,ano:anoOk(m.ano)?m.ano:null,mesNum:mesNum(m),sem,kwh:sem?null:kwh,tarifa,custo,real,
+      difReal:real!=null&&custo!=null?real-custo:null,difPct:real!=null&&custo>0?(real/custo-1)*100:null};});
+  const com=A.filter(x=>!x.sem),N=com.length,cob=coberturaHist();
+  const nivel=N<CONFIG.minHist?'insuficiente':(N>=CONFIG.idealHist&&cob.anual)?'adequado':'limitado';
+  const porChave={};com.forEach(x=>{if(x.ano&&x.mesNum)porChave[x.ano*12+x.mesNum-1]=x;});
+  A.forEach((x,i)=>{
+    x.dev=null;x.hist=null;x.extraKwh=0;x.extraCusto=0;x.vKwh=null;x.vCusto=null;x.vReal=null;x.vAno=null;x.antAno=null;x.cls='indef';
+    if(x.sem)return;
+    const outros=com.filter(y=>y.i!==i).map(y=>y.kwh);
+    if(nivel!=='insuficiente'&&outros.length)x.hist=sum(outros)/outros.length;
+    x.dev=x.hist>0?(x.kwh/x.hist-1)*100:null;
+    x.cls=classificar(x.dev);
+    if(x.hist!=null){x.extraKwh=x.kwh-x.hist;x.extraCusto=x.extraKwh*x.tarifa;}
+    const p=A[i-1];
+    if(p&&!p.sem){x.vKwh=p.kwh>0?(x.kwh/p.kwh-1)*100:null;x.vCusto=p.custo>0?(x.custo/p.custo-1)*100:null;}
+    if(p&&p.real>0&&x.real!=null)x.vReal=(x.real/p.real-1)*100;
+    if(x.ano&&x.mesNum){const a=porChave[(x.ano-1)*12+x.mesNum-1];if(a&&a.kwh>0){x.antAno=a;x.vAno=(x.kwh/a.kwh-1)*100;}}
+  });
+  let sel=[...state.meses].sort((a,b)=>a-b).map(i=>A[i]).filter(x=>!x.sem),fb=false;
+  if(!sel.length&&N){sel=com;fb=true;}
+  return{A,sel,N,nivel,cob,fallbackSel:fb,meta:metaAtual(),foco:A[state.foco]||A[A.length-1]};
+}
+/* Problemas e limitações encontrados nos registros (para a aba Dados e para o relatório). */
+function qualidade(){
+  const Q=[],add=(n,t,m)=>Q.push({n,t,m});
+  const nomeA=m=>rot(m);
+  const mapa={};DATA.forEach((m,i)=>{const k=keyMA(m);if(k!==null)(mapa[k]=mapa[k]||[]).push(i);});
+  Object.keys(mapa).forEach(k=>{if(mapa[k].length>1)add('erro','Mês duplicado',`${nomeA(DATA[mapa[k][0]])} aparece ${mapa[k].length} vezes (linhas ${mapa[k].map(i=>i+1).join(', ')}). Remova ou corrija o ano ou o mês de um deles.`);});
+  const semAno=DATA.filter(m=>!anoOk(m.ano));
+  if(semAno.length)add('aviso','Registros sem ano',`${semAno.length} de ${DATA.length} registros não têm ano. Sem o ano, o painel não consegue ordenar no tempo, comparar o mesmo mês entre anos nem confirmar se o histórico cobre um ano completo.`);
+  const nomes={};DATA.forEach((m,i)=>{if(!anoOk(m.ano)){const k=semAc(m.mes);(nomes[k]=nomes[k]||[]).push(i);}});
+  Object.keys(nomes).forEach(k=>{if(nomes[k].length>1)add('aviso','Mesmo mês repetido sem ano',`“${DATA[nomes[k][0]].mes}” aparece ${nomes[k].length} vezes sem ano (linhas ${nomes[k].map(i=>i+1).join(', ')}). Informe o ano para distinguir os registros.`);});
+  const semMes=DATA.filter(m=>!mesNum(m));
+  if(semMes.length)add('aviso','Mês não reconhecido',`${semMes.map(m=>'“'+m.mes+'”').join(', ')}: use o nome do mês (por exemplo, Janeiro) para permitir a comparação entre anos.`);
+  const ks=DATA.map(keyMA);
+  if(ks.every(k=>k!==null)){
+    if(ks.some((k,i)=>i&&k<ks[i-1]))add('aviso','Fora de ordem cronológica','Os registros não estão em ordem de data. Use “Ordenar por data” na aba Dados.');
+    const u=[...new Set(ks)].sort((a,b)=>a-b),falt=[];
+    for(let i=1;i<u.length;i++)if(u[i]-u[i-1]>1){const f=u[i-1]+1,l=u[i]-1;const nf=k=>`${MESES[k%12]} ${Math.floor(k/12)}`;falt.push(f===l?nf(f):`${nf(f)} a ${nf(l)}`);}
+    if(falt.length)add('info','Meses sem registro',`Não há registro para: ${falt.join('; ')}. O painel não preenche esses meses e não os trata como consumo zero.`);
+  }
+  DATA.forEach(m=>{
+    if(totalMes(m)===0)add('aviso','Consumo igual a zero',`${nomeA(m)} tem consumo 0 kWh. Confirme se está correto; se faltar a informação, deixe o campo vazio para o mês ficar “sem dados”.`);
+    const ss=somaSetores(m),tt=m.total;
+    if(isNum(ss)&&isNum(tt)&&tt>0&&Math.abs(ss-tt)/tt>.02)add('aviso','Setores não fecham com o total',`${nomeA(m)}: a soma dos setores (${f0.format(ss)} kWh) difere do total (${f0.format(tt)} kWh). O total da unidade é a referência.`);
+    if(!(m.tarifa>0))add('aviso','Tarifa zerada',`${nomeA(m)}: tarifa igual a zero resulta em custo estimado zero.`);
+  });
+  const sd=DATA.filter(m=>!isNum(totalMes(m)));
+  if(sd.length)add('info','Meses sem dados',`${sd.map(nomeA).join(', ')}: sem consumo informado, ficam fora das médias e comparações.`);
+  return Q;
+}
+/* Setores no mês i: consumo do setor contra a média histórica do próprio setor (ignora o filtro de setor). */
+function setoresMes(i){
+  return SETORES.map(s=>{
+    const v=DATA.map(m=>m.setores[s.id]),kwh=v[i];
+    if(!isNum(kwh))return{id:s.id,nome:s.nome,kwh:null,hist:null,dev:null,cls:'indef',extra:0,sem:true};
+    const ok=v.filter(isNum).length>=CONFIG.minHist,hist=ok?mediaOutros(v,i):null,dev=hist>0?(kwh/hist-1)*100:null;
+    return{id:s.id,nome:s.nome,kwh,hist,dev,cls:classificar(dev),extra:hist!=null?kwh-hist:0,sem:false};
+  });
+}
+/* Índice de Atenção Energética (0-100). Indicador demonstrativo, sem validação científica.
+   Retorna null quando o mês não tem dados ou o histórico é insuficiente. */
+function indice(C,i){
+  const x=C.A[i],p=C.A[i-1],meta=C.meta;
+  if(!x||x.sem||x.dev==null)return null;
+  const pv=p&&!p.sem;
+  const F=[
+    {k:'hist',nome:'Desvio em relação à média histórica',v:x.dev,peso:IDX.pesos.hist,cond:'Consumo acima da média dos demais meses.',nota:'consumo do mês contra a média dos demais meses com dados'},
+    {k:'cons',nome:'Aumento do consumo vs. mês anterior',v:pv&&p.kwh>0?(x.kwh/p.kwh-1)*100:0,peso:IDX.pesos.cons,cond:'Consumo maior que o do mês anterior.',nota:pv?'kWh do mês contra o mês anterior':'sem mês anterior com dados (não conta como zero)'},
+    {k:'custo',nome:'Aumento do custo vs. mês anterior',v:pv&&p.custo>0?(x.custo/p.custo-1)*100:0,peso:IDX.pesos.custo,cond:'Custo maior que o do mês anterior, por mais consumo ou por tarifa mais alta.',nota:pv?'R$ do mês contra o mês anterior':'sem mês anterior com dados (não conta como zero)'},
+    {k:'meta',nome:'Distância em relação à meta',v:meta>0?(x.kwh/meta-1)*100:0,peso:IDX.pesos.meta,cond:'Consumo acima da meta mensal definida.',nota:'consumo contra a meta mensal'}
+  ];
+  F.forEach(f=>{f.pen=clamp(f.v/IDX.sat,0,1)*f.peso;});
+  const valor=Math.round(clamp(100-sum(F.map(f=>f.pen)),0,100));
+  return{valor,F,cls:idxCls(valor)};
+}
+/* Nível de evidência: separa variação estatística de evidência de desperdício. */
+function evidencia(f){
+  const m=DATA[f.i];
+  if(f.sem||f.cls==='indef')return{n:0,t:'Sem base de comparação',c:'mute',d:'Não há dados suficientes para comparar este mês com o histórico.'};
+  if(m.inv==='confirmada')return{n:3,t:'Desperdício confirmado pelo responsável',c:'crit',d:'O responsável registrou que a inspeção confirmou desperdício. Este é o único nível que indica desperdício.'};
+  if(m.inv==='justificada')return{n:2,t:'Variação justificada pelo responsável',c:'ok',d:'O responsável registrou uma mudança de rotina que explica a variação. O consumo foi registrado como esperado para a nova situação.'};
+  if(m.inv==='semcausa')return{n:2,t:'Investigada, sem causa identificada',c:'warn',d:'A investigação não encontrou causa. Considere nova inspeção ou medição por setor.'};
+  if(m.inv==='analise')return{n:1,t:'Em investigação',c:'warn',d:'A variação está sendo investigada. Ainda não há conclusão.'};
+  if(fora(f.cls))return{n:1,t:'Variação estatística, sem investigação',c:'warn',d:'O consumo saiu do padrão histórico. Isso não prova desperdício: pessoas, horários, eventos e equipamentos podem explicar a variação.'};
+  return{n:0,t:'Dentro do padrão histórico',c:'ok',d:'Sem variação relevante em relação ao histórico.'};
+}
+function resumo(f){
+  if(f.sem)return 'O mês em foco não tem dados informados. Ele fica fora das médias e das comparações e não é tratado como consumo zero.';
+  if(f.dev==null)return `Histórico insuficiente: são necessários pelo menos ${CONFIG.minHist} meses com dados para calcular a média histórica e classificar o consumo.`;
+  const ev=evidencia(f),m=DATA[f.i];
+  if(fora(f.cls)){
+    let t=`Consumo ${f1.format(f.dev)}% acima da média histórica. O aumento representa um custo adicional estimado de ${brl(f.extraCusto)} em relação ao consumo médio, considerando a tarifa configurada de ${brl2(f.tarifa)}/kWh. Esta é uma variação em relação ao histórico, e não prova desperdício. Recomenda-se investigar o que mudou no período, como pessoas, horários, eventos e equipamentos.`;
+    if(m.inv==='justificada')t+=' O responsável registrou uma justificativa para esta variação.';
+    if(m.inv==='confirmada')t+=' O responsável registrou que a inspeção confirmou desperdício.';
+    return t;
+  }
+  const q=f.dev<-CONFIG.limiares.atencao?' Uma queda deste porte pode refletir menor atividade ou falha de medição, e vale conferir.':'';
+  return `Consumo ${f1.format(Math.abs(f.dev))}% ${f.dev>=0?'acima':'abaixo'} da média histórica, dentro do padrão esperado. Nenhuma investigação prioritária é necessária; o custo estimado do mês é ${brl(f.custo)}.${q}`;
+}
+function mensagemMonit(f){
+  if(f.sem)return 'Este mês não tem dados informados e não entra na comparação.';
+  if(f.dev==null)return `Histórico insuficiente: são necessários pelo menos ${CONFIG.minHist} meses com dados.`;
+  if(fora(f.cls))return `Foi identificado um aumento de ${f1.format(f.dev)}% no consumo em relação à média histórica. Recomenda-se investigar possíveis alterações na utilização de equipamentos, iluminação e climatização, considerando também mudanças de pessoas, horários e eventos.`;
+  return `O consumo está dentro do padrão esperado (${pc(f.dev)} em relação à média histórica de ${kwhF(f.hist)}). Nenhuma investigação é necessária neste momento.`;
+}
+function avisoHist(C){
+  const sem=C.A.filter(x=>x.sem).map(x=>esc(x.mes)),cob=C.cob;
+  const L={insuficiente:['crit','Histórico insuficiente'],limitado:['warn','Histórico limitado'],adequado:['ok','Histórico adequado']}[C.nivel];
+  let t=`${C.N} ${C.N===1?'mês':'meses'} com dados na base`+(cob.anos.length?` (${cob.anos.length===1?'ano '+cob.anos[0]:'anos '+cob.anos[0]+' a '+cob.anos[cob.anos.length-1]})`:'')+'. ';
+  if(C.nivel==='insuficiente')t+=`São necessários pelo menos ${CONFIG.minHist} meses para calcular a média histórica, a classificação e o índice, que ficam indisponíveis. `;
+  else if(C.nivel==='limitado')t+=`Com poucos meses, a média histórica é menos estável e não capta a sazonalidade. Períodos maiores (o ideal é ${CONFIG.idealHist} meses distintos, cobrindo todo o calendário) permitem comparações mais consistentes. `;
+  else t+=`A base tem ${cob.distintos} meses distintos do calendário, o que permite analisar um ano completo. `;
+  if(C.N>=CONFIG.idealHist&&cob.distintos<12)t+=`Há ${C.N} registros, mas só ${cob.distintos} meses distintos: isso não é um ano completo. `;
+  if(cob.dup)t+=`Há meses duplicados (veja a aba Dados). `;
+  if(cob.semAno)t+=`${cob.semAno} registro(s) sem ano: não é possível confirmar o período coberto. <a href="#dados">Informar o ano</a>. `;
+  if(sem.length)t+=`Sem dados informados: ${sem.join(', ')}. Esses meses ficam fora das médias e comparações e não são tratados como consumo zero. `;
+  if(C.fallbackSel)t+='Nenhum mês selecionado tem dados; exibindo todos os meses com dados. ';
+  return `<span class="pill ${L[0]}">${L[1]}</span><span>${t}</span>`;
+}
+/* =====================================================================
+   5. GRÁFICOS (Chart.js)
+   ===================================================================== */
+const CH={};
+const CHART_ARIA={'c-ov':'Consumo mensal em kWh, colorido pela classificação','c-cons':'Consumo mensal em kWh com média histórica e meta','c-custo':'Evolução do custo estimado em reais','c-stack':'Consumo por setor ao longo dos meses','c-cmp':'Comparação do consumo entre dois períodos','c-scat':'Relação entre consumo em kWh e custo em reais','c-setor':'Consumo por setor no mês em foco contra a média do setor','c-idx':'Índice de atenção por mês','c-fin':'Custo mensal e acumulado','c-cen':'Custo por cenário simulado','c-sim':'Consumo atual e após a redução simulada','c-demo':'Consumo mensal do caso demonstrativo','c-mesmo':'Consumo do mesmo mês em anos diferentes','c-anos':'Consumo médio mensal por ano','c-real':'Custo estimado e valor real da conta por mês'};
+function themeChart(){
+  if(typeof Chart==='undefined')return;
+  const d=Chart.defaults;
+  d.color=css('--ink-2');d.borderColor=css('--line');d.font.family="'IBM Plex Sans',system-ui,sans-serif";d.font.size=12;
+  d.animation=matchMedia('(prefers-reduced-motion: reduce)').matches?false:{duration:260};
+  const t=d.plugins.tooltip;
+  t.backgroundColor=css('--tip-bg');t.titleColor=css('--tip-fg');t.bodyColor=css('--tip-fg');t.footerColor=css('--tip-fg');
+  t.padding=10;t.cornerRadius=8;t.boxPadding=4;t.titleFont={weight:'600'};
+  const l=d.plugins.legend.labels;l.usePointStyle=true;l.boxWidth=8;l.boxHeight=8;
+}
+function killChart(id){if(CH[id]){CH[id].destroy();delete CH[id];}}
+function mk(id,cfg){
+  const el=document.getElementById(id);if(!el)return;
+  killChart(id);
+  if(typeof Chart==='undefined'){el.parentNode.innerHTML='<p class="note">Não foi possível carregar a biblioteca de gráficos.</p>';return;}
+  el.setAttribute('role','img');el.setAttribute('aria-label',CHART_ARIA[id]||'Gráfico');
+  cfg.options=Object.assign({responsive:true,maintainAspectRatio:false},cfg.options||{});
+  CH[id]=new Chart(el,cfg);
+}
+const axisK={beginAtZero:true,ticks:{callback:v=>f0.format(v)},grid:{color:()=>css('--line')}};
+const axisX={grid:{display:false}};
+function legendClasses(){
+  return ['normal','atencao','critico'].map(c=>`<span><i style="background:${clsColor(c)}"></i>${CLS[c].t}</span>`).join('')+
+    `<span><i style="background:${css('--ink')};height:3px;vertical-align:3px"></i>Média histórica (demais meses)</span><span><i style="background:${css('--accent')};height:3px;vertical-align:3px"></i>Meta mensal</span>`;
+}
+function chartConsumo(id,C){
+  const s=C.sel;
+  mk(id,{type:'bar',data:{labels:s.map(x=>ab(x.i)),datasets:[
+    {label:'Consumo (kWh)',data:s.map(x=>x.kwh),backgroundColor:s.map(x=>clsColor(x.cls)),borderRadius:5,maxBarThickness:60,order:3},
+    {type:'line',label:'Média histórica',data:s.map(x=>x.hist),showLine:false,pointStyle:'line',pointRadius:20,pointHoverRadius:20,pointBorderWidth:3,borderColor:css('--ink'),backgroundColor:css('--ink'),order:1},
+    {type:'line',label:'Meta mensal',data:s.map(()=>C.meta>0?C.meta:null),borderColor:css('--accent'),borderDash:[6,4],borderWidth:2,pointRadius:0,order:2}
+  ]},options:{interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{
+    title:i=>DATA[s[i[0].dataIndex].i].mes,
+    label:c=>c.parsed.y==null?`${c.dataset.label}: indisponível`:`${c.dataset.label}: ${f0.format(Math.round(c.parsed.y))} kWh`,
+    afterBody:it=>{const x=s[it[0].dataIndex];return [
+      x.dev==null?'Sem média histórica (histórico insuficiente)':`Variação vs. média histórica: ${pc(x.dev)}`,
+      x.vKwh==null?'':`Variação vs. mês anterior: ${pc(x.vKwh)}`,
+      `Classificação: ${CLS[x.cls].t}`,`Custo estimado: ${brl(x.custo)}`].filter(Boolean);}}}},
+    scales:{y:Object.assign({},axisK,{title:{display:true,text:'kWh'}}),x:axisX}}});
+}
+
+/* Ordena por data quando todos os registros têm mês e ano; mantém seleção e mês em foco pelo registro, não pela posição. */
+function ordenarDados(){
+  if(!DATA.every(m=>keyMA(m)!==null))return false;
+  const foco=DATA[state.foco],sel=[...state.meses].map(i=>DATA[i]),antes=DATA.slice();
+  DATA.sort((a,b)=>keyMA(a)-keyMA(b));
+  state.meses=new Set(sel.map(m=>DATA.indexOf(m)).filter(i=>i>=0));
+  state.foco=Math.max(0,DATA.indexOf(foco));
+  defaultCmp();
+  return antes.some((m,i)=>m!==DATA[i]);
+}
+/* Índice de outro registro com o mesmo mês e ano (ou -1). Registros sem ano não são comparados. */
+function indiceDuplicado(m,ignorar){const k=keyMA(m);if(k===null)return -1;return DATA.findIndex((o,i)=>i!==ignorar&&keyMA(o)===k);}
+/* Cópia de segurança do estado salvo antes de operações que substituem dados. */
+function fazerBackup(motivo){
+  try{const cur=localStorage.getItem(LS3);if(cur)localStorage.setItem(LSB,JSON.stringify({t:new Date().toISOString(),motivo,estado:cur}));}catch(e){console.error('[Energia em Foco] Não foi possível criar a cópia de segurança:',e);}
+}
+function lerBackup(){try{const b=JSON.parse(localStorage.getItem(LSB)||'null');return b&&typeof b.estado==='string'?b:null;}catch(e){return null;}}
+/* =====================================================================
+   6. SEÇÕES (cada uma redesenha apenas o seu conteúdo dinâmico)
+   ===================================================================== */
+const V={};
+function kpi(o){
+  return `<article class="card kpi"><p class="kl">${o.label}</p><p class="kv">${o.valor}<span>${o.unit||''}</span></p>`+
+    (o.pill?`<p class="kp">${o.pill}<span class="ks">${o.sub||''}</span></p>`:'')+
+    `<p class="ke">${o.expl}</p>${o.extra||''}</article>`;
+}
+function variacaoPeriodo(C){
+  const idx=[...state.meses].sort((a,b)=>a-b),len=idx.length,first=idx[0];
+  if(first-len<0)return null;
+  const prev=C.A.slice(first-len,first).filter(x=>!x.sem);
+  if(!prev.length||!C.sel.length)return null;
+  const mp=sum(prev.map(x=>x.kwh))/prev.length,ms=sum(C.sel.map(x=>x.kwh))/C.sel.length;
+  if(!(mp>0))return null;
+  return{pct:(ms/mp-1)*100,base:`vs. ${ab(first-len)}–${ab(first-1)}`,n:prev.length};
+}
+function tagsCtx(m){return (m.ctx||[]).map(id=>`<span class="pill info">${esc((CTX.find(c=>c.id===id)||{t:id}).t)}</span>`).join(' ');}
+function obsBlock(m){
+  if(!m.obs&&!(m.ctx||[]).length&&!m.inv)return '<p class="note" style="margin:8px 0 0">Nenhuma observação registrada para este mês. Registre o contexto na aba <a href="#monitoramento">Monitoramento</a>.</p>';
+  return `<div class="obs-view"><p class="kl">Contexto registrado pelo responsável</p><p class="kp">${tagsCtx(m)}${m.inv?`<span class="pill mute">${esc(invTxt(m))}</span>`:''}</p>${m.obs?`<p class="ke">“${esc(m.obs)}”</p>`:''}</div>`;
+}
+V['visao-geral']=function(C){
+  const f=C.foco,ix=indice(C,f.i),s=C.sel,m=DATA[f.i],ev=evidencia(f);
+  const tot=sum(s.map(x=>x.kwh)),cus=sum(s.map(x=>x.custo)),med=s.length?tot/s.length:null;
+  const foraL=s.filter(x=>fora(x.cls)&&x.extraCusto>0),econ=sum(foraL.map(x=>x.extraCusto)),econK=sum(foraL.map(x=>x.extraKwh));
+  const vp=variacaoPeriodo(C),escopo=nomeSetor(state.setor);
+  $('#insight').innerHTML=`<div class="card insight ${CLS[f.cls].c}"><div class="in-head"><span class="eyebrow">Leitura do mês em foco · ${nm(f.i)} · ${esc(escopo)}</span>${pill(f.cls)}</div>
+    <p class="in-txt">${resumo(f)}</p>
+    <p class="kp"><span class="pill ${ev.c}">${ev.t}</span><span class="ks">${ev.d}</span></p>${obsBlock(m)}
+    <div class="in-actions"><a class="btn" href="#monitoramento">Ver monitoramento</a><a class="btn ghost" href="#melhorias">Ver recomendações</a></div></div>`;
+  const periodo=!s.length?'—':s.length===1?nm(s[0].i):`${nm(s[0].i)} a ${nm(s[s.length-1].i)}`;
+  $('#kpis').innerHTML=[
+    kpi({label:'Consumo total',valor:f0.format(Math.round(tot)),unit:'kWh',expl:`Soma dos ${s.length} mês(es) com dados selecionados (${periodo}). Setor: ${esc(escopo)}.`}),
+    kpi({label:'Custo total',valor:brl(cus),expl:`Estimativa: kWh × tarifa (${state.usarBase?'da base':brl2(state.tarifa)+'/kWh'}). Pode não incluir impostos e taxas de uma conta real.`}),
+    vp?kpi({label:'Variação vs. período anterior',valor:pc(vp.pct),pill:`<span class="pill ${vp.pct>=CONFIG.limiares.atencao?'warn':'info'}">${vp.pct>0?'subiu':'caiu'}</span>`,sub:vp.base,
+      expl:`Média mensal do período contra a média do período imediatamente anterior (${vp.n} mês(es) com dados).`}):
+      kpi({label:'Variação vs. período anterior',valor:'—',expl:'Não há período anterior com dados na base para comparar com os meses selecionados.'}),
+    kpi({label:'Média de consumo mensal',valor:med==null?'—':f0.format(Math.round(med)),unit:med==null?'':'kWh/mês',expl:`Média dos meses selecionados com dados. Meta mensal: ${kwhF(C.meta)}.`,
+      pill:med==null?'':med>C.meta?`<span class="pill warn">acima da meta</span>`:`<span class="pill ok">dentro da meta</span>`,sub:med==null?'':pc((med/C.meta-1)*100)}),
+    kpi({label:'Economia potencial estimada',valor:brl(econ),pill:'<span class="pill info">estimativa</span>',sub:econK>0?`${kwhF(econK)} a menos`:'',
+      expl:foraL.length?`Se os ${foraL.length} mês(es) fora do padrão voltassem à média histórica. É um potencial, não uma economia realizada, e parte do aumento pode ter justificativa.`:'Nenhum mês do período está acima do padrão, então não há excedente a recuperar.'}),
+    kpi({label:'Índice de Atenção Energética',valor:ix?ix.valor:'—',unit:ix?'/100':'',pill:ix?`<span class="pill ${ix.cls.c}">${ix.cls.t}</span>`:'<span class="pill mute">indisponível</span>',sub:nm(f.i),
+      expl:ix?'Quanto menor, maior a atenção necessária. Indicador demonstrativo de atenção, não é medida científica.':'Exige histórico suficiente e dados no mês em foco.',extra:ix?`<div class="track"><i class="${ix.cls.c==='ok'?'':ix.cls.c}" style="width:${ix.valor}%"></i></div>`:''})
+  ].join('');
+  const so=f.sem?[]:setoresMes(f.i).filter(x=>fora(x.cls)&&x.extra>0).sort((a,b)=>b.extra-a.extra);
+  const nRec=recomendacoes(C);
+  $('#tres').innerHTML=
+    `<li><b>1. Quanto estamos consumindo?</b><span>${kwhF(tot)} no período, com custo estimado de ${brl(cus)} e média de ${med==null?'—':kwhF(med)} por mês.</span></li>`+
+    `<li><b>2. Onde podem existir pontos de desperdício?</b><span>${so.length?`Em ${nm(f.i)}, ${so.map(x=>`${esc(x.nome)} (${pc(x.dev)})`).join(' e ')} ${so.length>1?'tiveram':'teve'} o maior aumento em relação ao próprio histórico (${FONTES[CONFIG.fonteSetores].rot}). Isto indica onde investigar, não a causa. <a href="#monitoramento">Ver setores</a>`:`Nenhum setor saiu do padrão em ${nm(f.i)}, ou não há dados suficientes para comparar.`}</span></li>`+
+    `<li><b>3. O que podemos melhorar?</b><span>${nRec.length} recomendações para investigação, ${nRec.filter(r=>r.prio==='Alta').length} de prioridade alta. <a href="#melhorias">Abrir plano de ação</a></span></li>`;
+  chartConsumo('c-ov',C);
+  $('#lg-ov').innerHTML=legendClasses();
+};
+
+V.consumo=function(C){
+  const s=C.sel;
+  chartConsumo('c-cons',C);
+  $('#lg-cons').innerHTML=legendClasses();
+  const last=s.length-1;
+  mk('c-custo',{type:'line',data:{labels:s.map(x=>ab(x.i)),datasets:[{label:'Custo estimado (R$)',data:s.map(x=>x.custo),borderColor:css('--accent'),backgroundColor:alpha('--accent',.14),fill:true,tension:.3,borderWidth:2.5,
+    pointRadius:s.map((_,k)=>k===last?6:3),pointBackgroundColor:css('--accent')}]},
+    options:{interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{title:i=>rot(DATA[s[i[0].dataIndex].i]),
+      label:c=>{const x=s[c.dataIndex];return `Custo: ${brl(x.custo)} (${f0.format(Math.round(x.kwh))} kWh × ${brl2(x.tarifa)})`;},
+      afterLabel:c=>{const x=s[c.dataIndex];return x.vCusto==null?'':`Vs. mês anterior: ${pc(x.vCusto)}`;}}}},
+      scales:{y:Object.assign({},axisK,{title:{display:true,text:'R$'}}),x:axisX}}});
+  const sd=s.filter(x=>SETORES.some(st=>isNum(DATA[x.i].setores[st.id])));
+  $('#stack-fonte').innerHTML=`${fonteBadge()} <span class="ks">${notaSetores()}</span>`;
+  mk('c-stack',{type:'bar',data:{labels:sd.map(x=>ab(x.i)),datasets:SETORES.map((st,k)=>({label:st.nome,data:sd.map(x=>DATA[x.i].setores[st.id]),backgroundColor:css('--s'+(k+1)),borderRadius:0,maxBarThickness:60}))},
+    options:{interaction:{mode:'index',intersect:false},plugins:{tooltip:{callbacks:{title:i=>rot(DATA[sd[i[0].dataIndex].i])+' ('+FONTES[CONFIG.fonteSetores].rot+')',label:c=>c.parsed.y==null?`${c.dataset.label}: sem dados`:`${c.dataset.label}: ${f0.format(c.parsed.y)} kWh`,footer:it=>`Soma dos setores: ${f0.format(sum(it.map(i=>i.parsed.y||0)))} kWh`}}},
+      scales:{x:Object.assign({stacked:true},axisX),y:Object.assign({stacked:true},axisK,{title:{display:true,text:'kWh'}})}}});
+  /* comparação entre períodos (só meses com dados) */
+  const rng=([a,b])=>C.A.slice(a,b+1),A=rng(state.cmpA),B=rng(state.cmpB),n=Math.max(A.length,B.length);
+  const lab=Array.from({length:n},(_,k)=>'Mês '+(k+1));
+  const nomePer=r=>`${rotCurto(DATA[r[0]])}–${rotCurto(DATA[r[1]])}`;
+  mk('c-cmp',{type:'line',data:{labels:lab,datasets:[
+    {label:'Período A ('+nomePer(state.cmpA)+')',data:A.map(x=>x.kwh),borderColor:css('--ink-3'),backgroundColor:css('--ink-3'),borderWidth:2.5,tension:.25,pointRadius:4,spanGaps:false},
+    {label:'Período B ('+nomePer(state.cmpB)+')',data:B.map(x=>x.kwh),borderColor:css('--accent'),backgroundColor:css('--accent'),borderWidth:2.5,tension:.25,pointRadius:4,spanGaps:false}]},
+    options:{interaction:{mode:'index',intersect:false},plugins:{tooltip:{callbacks:{label:c=>{const x=(c.datasetIndex?B:A)[c.dataIndex];return x.sem?`${x.mes}: sem dados`:`${x.mes}: ${f0.format(x.kwh)} kWh`;}}}},scales:{y:Object.assign({},axisK,{beginAtZero:false,title:{display:true,text:'kWh'}}),x:axisX}}});
+  const m=r=>{const d=r.filter(x=>!x.sem),rl=r.filter(x=>x.real!=null);return{t:sum(d.map(x=>x.kwh)),c:sum(d.map(x=>x.custo)),n:d.length,tot:r.length,mx:d.length?Math.max(...d.map(x=>x.kwh)):null,real:rl.length?sum(rl.map(x=>x.real))/rl.length:null,nreal:rl.length};};
+  const a=m(A),b=m(B);
+  const vr=(x,y)=>x>0&&isNum(y)?`<span class="${y>x?'up':'dn'}">${pc((y/x-1)*100)}</span>`:'—';
+  const mm=(x,k)=>x.n?x[k]/x.n:null;
+  $('#cmp-table').innerHTML=`<table><thead><tr><th>Indicador</th><th class="n">A</th><th class="n">B</th><th class="n">B vs. A</th></tr></thead><tbody>
+    <tr><td>Meses com dados</td><td class="n">${a.n} de ${a.tot}</td><td class="n">${b.n} de ${b.tot}</td><td class="n">—</td></tr>
+    <tr><td>Consumo total</td><td class="n">${kwhF(a.t)}</td><td class="n">${kwhF(b.t)}</td><td class="n">${a.n===b.n?vr(a.t,b.t):'—'}</td></tr>
+    <tr><td>Média mensal</td><td class="n">${a.n?kwhF(mm(a,'t')):'sem dados'}</td><td class="n">${b.n?kwhF(mm(b,'t')):'sem dados'}</td><td class="n">${vr(mm(a,'t'),mm(b,'t'))}</td></tr>
+    <tr><td>Maior mês</td><td class="n">${a.n?kwhF(a.mx):'sem dados'}</td><td class="n">${b.n?kwhF(b.mx):'sem dados'}</td><td class="n">${vr(a.mx,b.mx)}</td></tr>
+    <tr><td>Custo estimado médio mensal</td><td class="n">${a.n?brl(mm(a,'c')):'—'}</td><td class="n">${b.n?brl(mm(b,'c')):'—'}</td><td class="n">${vr(mm(a,'c'),mm(b,'c'))}</td></tr>
+    <tr><td>Valor real médio da conta</td><td class="n">${a.nreal?brl(a.real)+` <span class="ks">(${a.nreal} ${a.nreal===1?'mês':'meses'})</span>`:'não informado'}</td><td class="n">${b.nreal?brl(b.real)+` <span class="ks">(${b.nreal} ${b.nreal===1?'mês':'meses'})</span>`:'não informado'}</td><td class="n">${vr(a.real,b.real)}</td></tr></tbody></table>
+    <p class="note">${a.n!==b.n?'Os períodos têm números diferentes de meses com dados, por isso a comparação usa médias mensais. ':''}Meses sem dados não entram nas médias nem contam como zero.</p>`;
+  const xs=s.map(x=>x.kwh);
+  if(xs.length){
+    const xmin=Math.floor(Math.min(...xs)*.9/100)*100,xmax=Math.ceil(Math.max(...xs)*1.05/100)*100;
+    const ds=[{label:'Meses',data:s.map(x=>({x:x.kwh,y:x.custo})),backgroundColor:s.map(x=>clsColor(x.cls)),pointRadius:7,pointHoverRadius:9}];
+    if(!state.usarBase)ds.push({label:'Custo = kWh × tarifa',type:'scatter',showLine:true,data:[{x:xmin,y:xmin*state.tarifa},{x:xmax,y:xmax*state.tarifa}],pointRadius:0,borderColor:css('--ink-3'),borderDash:[5,4],borderWidth:1.5});
+    mk('c-scat',{type:'scatter',data:{datasets:ds},options:{plugins:{tooltip:{callbacks:{
+      label:c=>c.datasetIndex?`Reta da tarifa de ${brl2(state.tarifa)}/kWh`:`${rot(DATA[s[c.dataIndex].i])}: ${f0.format(c.parsed.x)} kWh → ${brl(c.parsed.y)}`}}},
+      scales:{x:{min:xmin,max:xmax,title:{display:true,text:'Consumo (kWh)'},ticks:{callback:v=>f0.format(v)},grid:{color:()=>css('--line')}},y:{title:{display:true,text:'Custo (R$)'},ticks:{callback:v=>f0.format(v)},grid:{color:()=>css('--line')}}}}});
+  }else killChart('c-scat');
+  anualComparacao(C);
+};
+
+V.monitoramento=function(C){
+  const f=C.foco,m=DATA[f.i],c=CLS[f.cls].c,ev=evidencia(f);
+  $$('[data-th="atencao"]').forEach(e=>e.textContent='+'+CONFIG.limiares.atencao+'%');
+  $$('[data-th="critico"]').forEach(e=>e.textContent='+'+CONFIG.limiares.critico+'%');
+  if(document.activeElement!==$('#th-at'))$('#th-at').value=CONFIG.limiares.atencao;
+  if(document.activeElement!==$('#th-cr'))$('#th-cr').value=CONFIG.limiares.critico;
+  $('#mon-status').innerHTML=`<div class="ch"><h2>Monitoramento inteligente · ${nm(f.i)}</h2><p class="cs">Setor: ${esc(nomeSetor(state.setor))}. O consumo do mês é comparado com a média histórica dos demais meses com dados.</p></div>
+    <div class="mon"><div class="mm"><span>Média histórica</span><b>${f.hist==null?'—':kwhF(f.hist)}</b></div>
+    <div class="mm"><span>Consumo atual</span><b>${f.sem?'sem dados':kwhF(f.kwh)}</b></div>
+    <div class="mm"><span>Variação</span><b>${f.dev==null?'—':pc(f.dev)}</b></div>
+    <div class="mm"><span>Classificação</span><b>${pill(f.cls)}</b></div></div>
+    <div class="callout ${c}"><b>${CLS[f.cls].t}</b><p>${mensagemMonit(f)}</p></div>
+    ${f.vAno!=null?`<p class="note">Mesmo mês do ano anterior (${esc(f.antAno.mes)}): ${kwhF(f.antAno.kwh)}, variação de <b>${pc(f.vAno)}</b>. Comparar com o mesmo mês reduz o efeito da sazonalidade.</p>`:(f.sem?'':'<p class="note">Sem o mesmo mês do ano anterior na base, não é possível comparar com a mesma época do ano.</p>')}
+    ${f.dev!=null?`<p class="note">${f.extraKwh>=0?'Custo adicional':'Diferença de custo'} estimado em relação ao consumo médio: <b>${f.extraCusto>=0?'':'−'}${brl(Math.abs(f.extraCusto))}</b> (${kwhF(Math.abs(f.extraKwh))} × ${brl2(f.tarifa)}). É uma estimativa da diferença, e não a causa confirmada do aumento.</p>`:''}
+    <div class="callout ${ev.c}" style="margin-top:12px"><b>Nível de evidência: ${ev.t}</b><p>${ev.d}</p></div>
+    <div class="steps"><span class="${ev.n>=0?'on':''}">1 Variação estatística</span><span class="${ev.n>=1&&m.inv?'on':''}">2 Investigação</span><span class="${ev.n>=2?'on':''}">3 Conclusão do responsável</span></div>
+    <p class="note">Variação estatística é só uma diferença em relação ao histórico. Evidência de desperdício exige inspeção e é registrada por uma pessoa, nunca deduzida pelo painel.</p>`;
+  /* contexto e observações */
+  $('#ctx-title').textContent=`Contexto e observações · ${rot(m)}`;
+  $('#ctx-chips').innerHTML=CTX.map(x=>`<button class="chip" data-act="ctx" data-id="${x.id}" aria-pressed="${(m.ctx||[]).includes(x.id)}">${x.t}</button>`).join('');
+  $('#ctx-inv').innerHTML=INV.map(x=>`<option value="${x.id}"${m.inv===x.id?' selected':''}>${x.t}</option>`).join('');
+  if(document.activeElement!==$('#ctx-obs'))$('#ctx-obs').value=m.obs||'';
+  /* setores */
+  $('#setor-fonte').innerHTML=`${fonteBadge()}<span class="ks">${notaSetores()}</span>`;
+  const so=setoresMes(f.i);
+  if(f.sem||so.every(x=>x.sem)){killChart('c-setor');$('#setor-table').innerHTML='<p class="note">Sem dados por setor para o mês em foco.</p>';}
+  else{
+    mk('c-setor',{type:'bar',data:{labels:so.map(x=>x.nome),datasets:[
+      {label:'Média histórica do setor',data:so.map(x=>x.hist),backgroundColor:alpha('--ink-3',.55),borderRadius:4},
+      {label:rot(DATA[f.i]),data:so.map(x=>x.kwh),backgroundColor:so.map(x=>clsColor(x.cls)),borderRadius:4}]},
+      options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{title:i=>i[0].label+' ('+FONTES[CONFIG.fonteSetores].rot+')',label:c=>{const x=so[c.dataIndex];return c.datasetIndex?(x.sem?'Sem dados':`${rot(DATA[f.i])}: ${f0.format(x.kwh)} kWh (${x.dev==null?'sem média':pc(x.dev)})`):(x.hist==null?'Sem média histórica':`Média histórica: ${f0.format(x.hist)} kWh`);}}}},
+        scales:{x:Object.assign({},axisK,{title:{display:true,text:'kWh'}}),y:{grid:{display:false}}}}});
+    const ss=somaSetores(m),tt=totalMes(m),dif=isNum(ss)&&isNum(tt)?tt-ss:null;
+    $('#setor-table').innerHTML=`<table><thead><tr><th>Setor</th><th class="n">Variação</th><th>Classificação</th></tr></thead><tbody>${so.map(x=>`<tr><td>${esc(x.nome)}</td><td class="n">${x.dev==null?'—':pc(x.dev)}</td><td>${pill(x.cls)}</td></tr>`).join('')}</tbody></table>
+      ${dif!=null&&Math.abs(dif)>1?`<p class="note">A soma dos setores (${kwhF(ss)}) difere do total da unidade (${kwhF(tt)}) em ${kwhF(Math.abs(dif))}. O total da unidade é a referência.</p>`:''}`;
+  }
+  $('#mon-table').innerHTML=`<table><thead><tr><th>Mês</th><th class="n">Consumo</th><th class="n">Média histórica</th><th class="n">Variação</th><th>Classificação</th><th class="n">Vs. mesmo mês do ano anterior</th><th>Contexto</th><th class="n">Diferença de custo</th><th></th></tr></thead><tbody>${C.A.map(x=>`<tr class="${x.i===f.i?'on':''}"><td>${nm(x.i)}</td><td class="n">${x.sem?'sem dados':kwhF(x.kwh)}</td><td class="n">${x.hist==null?'—':kwhF(x.hist)}</td>
+    <td class="n"><span class="${x.cls==='critico'?'up c':x.cls==='atencao'?'up':''}">${x.dev==null?'—':pc(x.dev)}</span></td><td>${pill(x.cls)}</td><td class="n">${x.vAno==null?'—':pc(x.vAno)}</td>
+    <td style="white-space:normal;min-width:150px">${DATA[x.i].inv?`<span class="ks">${esc(invTxt(DATA[x.i]))}</span>`:(DATA[x.i].obs||(DATA[x.i].ctx||[]).length?'<span class="ks">com observação</span>':'<span class="ks">—</span>')}</td>
+    <td class="n">${x.dev==null?'—':(x.extraCusto<0?'−':'+')+brl(Math.abs(x.extraCusto))}</td>
+    <td>${x.i===f.i?'<span class="ks">em foco</span>':`<button class="lnk" data-act="foco" data-i="${x.i}">Analisar</button>`}</td></tr>`).join('')}</tbody></table>`;
+};
+
+/* ---------- comparação anual: mesmo mês em anos diferentes e totais por ano ---------- */
+function anualComparacao(C){
+  const D=C.A.filter(x=>!x.sem&&x.ano&&x.mesNum),semAno=C.A.filter(x=>!x.sem&&!x.ano).length;
+  const anos=[...new Set(D.map(x=>x.ano))].sort((a,b)=>a-b),cob=C.cob;
+  let st=cob.anual?`O histórico cobre os 12 meses do calendário (${cob.anos[0]}${cob.anos.length>1?' a '+cob.anos[cob.anos.length-1]:''}), então a análise anual é possível.`:
+    `O histórico tem ${cob.n} ${cob.n===1?'registro':'registros'} com dados e ${cob.distintos} ${cob.distintos===1?'mês distinto':'meses distintos'} do calendário. Ele não cobre um ano completo, e por isso totais anuais devem ser lidos com cautela.`;
+  if(semAno)st+=` ${semAno} registro(s) sem ano ficam fora desta comparação. <a href="#dados">Informar o ano</a>.`;
+  $('#anual-status').innerHTML=st;
+  const multi=[...new Set(D.map(x=>x.mesNum))].filter(n=>new Set(D.filter(x=>x.mesNum===n).map(x=>x.ano)).size>=2).sort((a,b)=>a-b);
+  if(!multi.includes(state.cmpMes))state.cmpMes=multi[0]||0;
+  const sel=$('#cmp-mes');
+  sel.innerHTML=multi.length?multi.map(n=>`<option value="${n}">${MESES[n-1]}</option>`).join(''):'<option value="">Nenhum mês aparece em dois anos</option>';
+  sel.disabled=!multi.length;if(multi.length)sel.value=String(state.cmpMes);
+  if(!multi.length){killChart('c-mesmo');$('#mesmo-table').innerHTML='<p class="note">Para comparar o mesmo mês, é preciso ter esse mês em pelo menos dois anos, com o ano informado em cada registro.</p>';}
+  else{
+    const it=D.filter(x=>x.mesNum===state.cmpMes).sort((a,b)=>a.ano-b.ano);
+    mk('c-mesmo',{type:'bar',data:{labels:it.map(x=>String(x.ano)),datasets:[{label:MESES[state.cmpMes-1]+' (kWh)',data:it.map(x=>x.kwh),backgroundColor:it.map((_,k)=>k===it.length-1?css('--accent'):css('--ink-3')),borderRadius:5,maxBarThickness:60}]},
+      options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${f0.format(Math.round(c.parsed.y))} kWh · custo estimado ${brl(it[c.dataIndex].custo)}`}}},scales:{y:Object.assign({},axisK,{title:{display:true,text:'kWh'}}),x:axisX}}});
+    $('#mesmo-table').innerHTML=`<table><thead><tr><th>${MESES[state.cmpMes-1]}</th><th class="n">Consumo</th><th class="n">Custo estimado</th><th class="n">Vs. ano anterior</th></tr></thead><tbody>${it.map((x,k)=>{const p=it[k-1];
+      return `<tr><td>${x.ano}</td><td class="n">${kwhF(x.kwh)}</td><td class="n">${brl(x.custo)}</td><td class="n">${p&&p.kwh>0?`<span class="${x.kwh>p.kwh?'up':'dn'}">${pc((x.kwh/p.kwh-1)*100)}</span> <span class="ks">vs. ${p.ano}</span>`:'—'}</td></tr>`;}).join('')}</tbody></table>`;
+  }
+  if(anos.length<2){killChart('c-anos');$('#anos-table').innerHTML='<p class="note">Para comparar períodos anuais, é preciso ter registros com dados de pelo menos dois anos.</p>';return;}
+  const G=anos.map(a=>{const r=D.filter(x=>x.ano===a);return{ano:a,r,n:r.length,tot:sum(r.map(x=>x.kwh)),custo:sum(r.map(x=>x.custo))};});
+  mk('c-anos',{type:'bar',data:{labels:G.map(g=>String(g.ano)),datasets:[{label:'Média mensal (kWh)',data:G.map(g=>g.tot/g.n),backgroundColor:css('--s2'),borderRadius:5,maxBarThickness:60}]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Média mensal: ${f0.format(Math.round(c.parsed.y))} kWh (${G[c.dataIndex].n} meses com dados)`}}},scales:{y:Object.assign({},axisK,{title:{display:true,text:'kWh/mês'}}),x:axisX}}});
+  $('#anos-table').innerHTML=`<table><thead><tr><th>Ano</th><th class="n">Meses com dados</th><th class="n">Consumo total</th><th class="n">Média mensal</th><th class="n">Custo estimado</th><th class="n">Vs. ano anterior, meses em comum</th></tr></thead><tbody>${G.map((g,k)=>{
+    const p=G[k-1];let v='—';
+    if(p){const com=g.r.filter(x=>p.r.some(y=>y.mesNum===x.mesNum)),a1=sum(com.map(x=>x.kwh)),b1=sum(com.map(x=>p.r.find(y=>y.mesNum===x.mesNum).kwh));
+      v=com.length&&b1>0?`<span class="${a1>b1?'up':'dn'}">${pc((a1/b1-1)*100)}</span> <span class="ks">${com.length} ${com.length===1?'mês':'meses'} vs. ${p.ano}</span>`:'<span class="ks">sem meses em comum</span>';}
+    return `<tr><td>${g.ano}</td><td class="n">${g.n}${g.n===12?' (completo)':''}</td><td class="n">${kwhF(g.tot)}</td><td class="n">${kwhF(g.tot/g.n)}</td><td class="n">${brl(g.custo)}</td><td class="n">${v}</td></tr>`;}).join('')}</tbody></table>
+    <p class="note">Anos com números diferentes de meses não são comparáveis pelo total. Use a média mensal ou a coluna dos meses em comum.</p>`;
+}
+function gaugeSVG(v){
+  const cx=120,cy=120,r=92,pt=(val,rad)=>{const a=Math.PI*(1-val/100);return[cx+rad*Math.cos(a),cy-rad*Math.sin(a)];};
+  const seg=(a,b,k)=>{const[x1,y1]=pt(a,r),[x2,y2]=pt(b,r);return `<path d="M${x1.toFixed(2)} ${y1.toFixed(2)} A${r} ${r} 0 0 1 ${x2.toFixed(2)} ${y2.toFixed(2)}" class="g-seg ${k}"/>`;};
+  const[nx,ny]=pt(v,r-24);
+  const tk=[0,50,80,100].map(t=>{const[x,y]=pt(t,r+16);return `<text x="${x.toFixed(1)}" y="${(y+3).toFixed(1)}" text-anchor="middle" class="g-tick">${t}</text>`;}).join('');
+  return `<svg viewBox="0 0 240 140" role="img" aria-label="Índice ${v} de 100">${seg(0.5,49.5,'crit')}${seg(50.5,79.5,'warn')}${seg(80.5,99.5,'ok')}${tk}<line x1="${cx}" y1="${cy}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" class="g-needle"/><circle cx="${cx}" cy="${cy}" r="6" class="g-hub"/></svg>`;
+}
+V.indice=function(C){
+  const f=C.foco,ix=indice(C,f.i);
+  if(ix){
+    $('#idx-gauge').innerHTML=`<div class="gauge">${gaugeSVG(ix.valor)}</div><p class="gv">${ix.valor}<span>/100</span></p>
+      <p class="gc"><span class="pill ${ix.cls.c}">${ix.cls.t}</span></p><p class="note" style="text-align:center">Mês em foco: ${nm(f.i)} · Setor: ${esc(nomeSetor(state.setor))}</p>`;
+    $('#idx-fatores').innerHTML=`<table><thead><tr><th>Fator</th><th class="n">Medido</th><th class="n">Peso</th><th class="n">Pontos descontados</th></tr></thead><tbody>${ix.F.map(x=>`<tr><td>${x.nome}<br><span class="ks">${x.cond} ${x.nota}.</span></td><td class="n">${pc(x.v)}</td><td class="n">${x.peso}</td><td class="n">${f1.format(x.pen)} <span class="bar-in" style="width:${Math.round(x.pen/x.peso*40)}px"></span></td></tr>`).join('')}
+      <tr><td><b>100 − ${f1.format(sum(ix.F.map(x=>x.pen)))} descontados</b></td><td></td><td class="n">${sum(ix.F.map(x=>x.peso))}</td><td class="n"><b>${ix.valor}</b></td></tr></tbody></table>`;
+  }else{
+    $('#idx-gauge').innerHTML=`<div class="callout mute"><b>Índice indisponível</b><p>${f.sem?'O mês em foco não tem dados informados.':`O histórico tem ${C.N} ${C.N===1?'mês':'meses'} com dados e são necessários pelo menos ${CONFIG.minHist}.`} O painel prefere não calcular a mostrar um número sem base.</p></div>`;
+    $('#idx-fatores').innerHTML=`<table><thead><tr><th>Fator</th><th class="n">Peso</th></tr></thead><tbody>${[['Desvio em relação à média histórica',IDX.pesos.hist],['Aumento do consumo vs. mês anterior',IDX.pesos.cons],['Aumento do custo vs. mês anterior',IDX.pesos.custo],['Distância em relação à meta',IDX.pesos.meta]].map(r=>`<tr><td>${r[0]}</td><td class="n">${r[1]}</td></tr>`).join('')}</tbody></table>`;
+  }
+  const vals=C.A.map((_,i)=>indice(C,i));
+  mk('c-idx',{type:'bar',data:{labels:C.A.map(x=>ab(x.i)),datasets:[{label:'Índice',data:vals.map(v=>v?v.valor:null),backgroundColor:vals.map(v=>v?css('--'+v.cls.c):css('--ink-3')),borderRadius:5,maxBarThickness:56}]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{title:i=>rot(DATA[i[0].dataIndex]),label:c=>vals[c.dataIndex]?`Índice ${c.parsed.y}: ${vals[c.dataIndex].cls.t}`:'Índice indisponível'}}},scales:{y:{min:0,max:100,grid:{color:()=>css('--line')}},x:axisX}}});
+  if(document.activeElement!==$('#meta-idx'))$('#meta-idx').value=Math.round(CONFIG.metaMensalKwh);
+};
+
+/* orçamento mensal de energia (R$) proporcional ao escopo (setor) selecionado */
+function orcAtual(){return CONFIG.metaMensalKwh>0?CONFIG.orcamentoMensal*(metaAtual()/CONFIG.metaMensalKwh):CONFIG.orcamentoMensal;}
+function orcStatus(pct){return pct==null?'indef':pct>100?'critico':pct>=90?'atencao':'normal';}
+V.financeiro=function(C){
+  const s=C.sel,f=C.foco,orc=orcAtual();
+  $('#fin-ex').innerHTML=f.sem?'O mês em foco não tem dados informados.':`Exemplo com o mês em foco (${nm(f.i)}): <b>${f0.format(Math.round(f.kwh))} kWh × ${brl2(f.tarifa)} = ${brl(f.custo)}</b>.`;
+  contaReal(C);
+  if(!s.length){$('#fin-kpis').innerHTML='<p class="note">Nenhum mês com dados selecionado.</p>';['c-fin','c-cen','c-orc'].forEach(killChart);$('#fin-cen').innerHTML='';$('#fin-table').innerHTML='';$('#orc-res').innerHTML='';return;}
+  const cus=sum(s.map(x=>x.custo)),mx=s.reduce((a,b)=>b.custo>a.custo?b:a),l=s[s.length-1];
+  $('#fin-kpis').innerHTML=[
+    kpi({label:'Custo do período',valor:brl(cus),expl:`${s.length} mês(es) com dados selecionado(s). Setor: ${esc(nomeSetor(state.setor))}.`}),
+    kpi({label:'Custo médio mensal',valor:brl(cus/s.length),expl:'Média do custo estimado nos meses selecionados.'}),
+    kpi({label:'Mês de maior custo',valor:brl(mx.custo),sub:nm(mx.i),expl:`${kwhF(mx.kwh)} consumidos nesse mês.`}),
+    kpi({label:'Variação dos gastos',valor:pc(l.vCusto),sub:l.vCusto==null?'':`${nm(l.i)} vs. mês anterior`,expl:l.vCusto==null?'Sem mês anterior com dados para comparar.':'Custo do último mês selecionado contra o mês anterior da base.'})
+  ].join('');
+  let ac=0;const cum=s.map(x=>(ac+=x.custo));
+  mk('c-fin',{type:'bar',data:{labels:s.map(x=>ab(x.i)),datasets:[
+    {label:'Custo mensal',data:s.map(x=>x.custo),backgroundColor:alpha('--accent',.85),borderRadius:5,maxBarThickness:50,yAxisID:'y'},
+    {type:'line',label:'Custo acumulado',data:cum,borderColor:css('--ink'),backgroundColor:css('--ink'),borderWidth:2.5,tension:.2,pointRadius:3,yAxisID:'y2'}]},
+    options:{interaction:{mode:'index',intersect:false},plugins:{tooltip:{callbacks:{title:i=>rot(DATA[s[i[0].dataIndex].i]),label:c=>`${c.dataset.label}: ${brl(c.parsed.y)}`}}},
+      scales:{y:Object.assign({},axisK,{title:{display:true,text:'Mensal (R$)'}}),y2:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:v=>f0.format(v)},title:{display:true,text:'Acumulado (R$)'}},x:axisX}}});
+  /* orçamento */
+  if(document.activeElement!==$('#orc-in'))$('#orc-in').value=CONFIG.orcamentoMensal;
+  const orcPer=orc*s.length,pctP=orcPer>0?cus/orcPer*100:null,stP=orcStatus(pctP),saldo=orcPer-cus;
+  const media=cus/s.length,proj=media*12,orcAno=orc*12;
+  const acm=[];let a2=0;s.forEach((x,k)=>{a2+=x.custo;acm.push(a2);});
+  $('#orc-res').innerHTML=`<div class="callout ${CLS[stP].c}"><b>${stP==='critico'?'Orçamento ultrapassado no período':stP==='atencao'?'Próximo do limite do orçamento':'Dentro do orçamento no período'}</b>
+    <p>Gasto estimado de ${brl(cus)} para um orçamento de ${brl(orcPer)} (${s.length} × ${brl(orc)}): ${pctP==null?'—':f1.format(pctP)+'% utilizado'}. ${saldo>=0?`Saldo de ${brl(saldo)}.`:`Excesso de ${brl(-saldo)}.`}</p></div>
+    <div class="track" style="margin-top:12px"><i class="${CLS[stP].c==='ok'?'':CLS[stP].c}" style="width:${clamp(pctP||0,0,100)}%"></i></div>
+    <div class="mon" style="margin-top:14px"><div class="mm"><span>Orçamento mensal</span><b>${brl(orc)}</b></div><div class="mm"><span>Gasto médio mensal</span><b>${brl(media)}</b></div>
+    <div class="mm"><span>Projeção em 12 meses</span><b>${brl(proj)}</b></div><div class="mm"><span>Orçamento anual</span><b>${brl(orcAno)}</b></div></div>
+    <p class="note">${proj>orcAno?`Mantido o gasto médio atual, a projeção anual ultrapassa o orçamento em ${brl(proj-orcAno)}.`:`Mantido o gasto médio atual, a projeção anual fica ${brl(orcAno-proj)} abaixo do orçamento.`} A projeção supõe o mesmo gasto todos os meses e não considera sazonalidade ou reajustes. O custo é uma estimativa (kWh × tarifa) e não inclui todos os itens de uma conta real.</p>`;
+  mk('c-orc',{type:'bar',data:{labels:s.map(x=>ab(x.i)),datasets:[
+    {label:'Custo mensal',data:s.map(x=>x.custo),backgroundColor:s.map(x=>x.custo>orc?css('--crit'):x.custo>=orc*.9?css('--warn'):css('--ok')),borderRadius:5,maxBarThickness:50,order:2},
+    {type:'line',label:'Orçamento mensal',data:s.map(()=>orc),borderColor:css('--ink'),borderDash:[6,4],borderWidth:2,pointRadius:0,order:1}]},
+    options:{interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{title:i=>rot(DATA[s[i[0].dataIndex].i]),
+      label:c=>`${c.dataset.label}: ${brl(c.parsed.y)}`,
+      afterBody:it=>{const x=s[it[0].dataIndex],d=x.custo-orc;return [`${d>0?'Acima':'Abaixo'} do orçamento em ${brl(Math.abs(d))} (${f1.format(x.custo/orc*100)}% do orçamento)`,`Acumulado: ${brl(acm[it[0].dataIndex])} de ${brl(orc*(it[0].dataIndex+1))}`];}}}},
+      scales:{y:Object.assign({},axisK,{title:{display:true,text:'R$'}}),x:axisX}}});
+  /* cenários (simulações) */
+  const r=state.reaj/100;
+  const sc=[
+    {n:'Cenário atual',v:cus,d:'Consumo e tarifa como estão na base.'},
+    {n:'Meses acima do padrão voltam à média',v:sum(s.map(x=>(fora(x.cls)&&x.hist!=null?Math.min(x.kwh,x.hist):x.kwh)*x.tarifa)),d:'Meses classificados como Atenção ou Crítico passam a consumir a média histórica. Hipótese de cálculo: parte do aumento pode ter justificativa.'},
+    {n:'Consumo limitado à meta mensal',v:sum(s.map(x=>Math.min(x.kwh,C.meta)*x.tarifa)),d:`Meses acima da meta (${kwhF(C.meta)}) passam a consumir o valor da meta.`},
+    {n:`Reajuste de tarifa de ${f1.format(state.reaj)}%`,v:cus*(1+r),d:'Mesmo consumo, tarifa reajustada.'}
+  ];
+  const cor=[css('--ink-3'),css('--ok'),css('--ok'),css('--warn')];
+  mk('c-cen',{type:'bar',data:{labels:sc.map(x=>x.n),datasets:[{label:'Custo no período',data:sc.map(x=>x.v),backgroundColor:cor,borderRadius:4}]},
+    options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${brl(c.parsed.x)} (${c.dataIndex?pc((c.parsed.x/sc[0].v-1)*100)+' vs. atual':'referência'})`}}},
+      scales:{x:Object.assign({},axisK,{title:{display:true,text:'R$'}}),y:{grid:{display:false},ticks:{callback:function(v){const t=this.getLabelForValue(v);return t.length>26?t.slice(0,25)+'…':t;}}}}}});
+  if(document.activeElement!==$('#fin-reaj'))$('#fin-reaj').value=state.reaj;
+  $('#fin-cen').innerHTML=`<table><thead><tr><th>Cenário (simulação)</th><th>Premissa</th><th class="n">Custo no período</th><th class="n">Diferença vs. atual</th></tr></thead><tbody>${sc.map((x,k)=>{const d=x.v-sc[0].v;
+    return `<tr><td>${x.n}</td><td style="white-space:normal;min-width:220px;color:var(--ink-2)">${x.d}</td><td class="n">${brl(x.v)}</td><td class="n">${k?`<span class="${d<0?'dn':'up'}">${d<0?'economia de ':'custo extra de '}${brl(Math.abs(d))}</span>`:'—'}</td></tr>`;}).join('')}</tbody></table>`;
+  let ac2=0;
+  $('#fin-table').innerHTML=`<table><thead><tr><th>Mês</th><th class="n">Consumo</th><th class="n">Tarifa</th><th class="n">Custo mensal</th><th class="n">Orçamento</th><th class="n">Saldo do mês</th><th class="n">Custo acumulado</th><th class="n">Variação vs. mês anterior</th></tr></thead><tbody>${C.A.filter(x=>state.meses.has(x.i)).map(x=>{
+    if(x.sem)return `<tr><td>${nm(x.i)}</td><td class="n" colspan="7"><span class="ks">sem dados informados (não entra nos totais)</span></td></tr>`;
+    ac2+=x.custo;const sd=orc-x.custo;
+    return `<tr><td>${nm(x.i)}</td><td class="n">${kwhF(x.kwh)}</td><td class="n">${brl2(x.tarifa)}</td><td class="n">${brl(x.custo)}</td><td class="n">${brl(orc)}</td><td class="n"><span class="${sd<0?'up c':'dn'}">${sd<0?'−':'+'}${brl(Math.abs(sd))}</span></td><td class="n">${brl(ac2)}</td><td class="n">${x.vCusto==null?'—':`<span class="${x.vCusto>0?'up':'dn'}">${pc(x.vCusto)}</span>`}</td></tr>`;}).join('')}</tbody></table>`;
+};
+
+/* ---------- custo estimado × valor real da conta ---------- */
+function contaReal(C){
+  const res=$('#real-res');
+  if(state.setor!=='todos'){killChart('c-real');res.innerHTML='<div class="callout mute"><b>Disponível para “Todos os setores”</b><p>O valor real da conta é do total da unidade. Selecione “Todos os setores” no filtro para compará-lo com o custo estimado.</p></div>';$('#real-table').innerHTML='';return;}
+  const S=C.A.filter(x=>state.meses.has(x.i)),R=S.filter(x=>x.real!=null),P=R.filter(x=>x.custo!=null);
+  if(!R.length){killChart('c-real');res.innerHTML='<div class="callout mute"><b>Nenhum valor real informado</b><p>Informe o valor pago na conta de cada mês na coluna “Conta real (R$)” da aba <a href="#dados">Dados</a>. Enquanto isso, o painel mostra apenas o custo estimado (kWh × tarifa). O painel não presume impostos, encargos ou outros valores que você não informou.</p></div>';$('#real-table').innerHTML='';return;}
+  const est=sum(P.map(x=>x.custo)),real=sum(P.map(x=>x.real)),dif=real-est,pct=est>0?(real/est-1)*100:null;
+  res.innerHTML=P.length?`<div class="mon"><div class="mm col-est"><span>Custo estimado (kWh × tarifa)</span><b>${brl(est)}</b></div><div class="mm col-real"><span>Valor real informado</span><b>${brl(real)}</b></div>
+    <div class="mm col-dif"><span>Diferença (real − estimado)</span><b class="${dif>0?'up':'dn'}">${dif>=0?'+':'−'}${brl(Math.abs(dif))}</b></div><div class="mm col-dif"><span>Diferença percentual</span><b class="${dif>0?'up':'dn'}">${pc(pct)}</b></div></div>
+    <p class="note" style="margin-top:0">Em ${P.length} ${P.length===1?'mês':'meses'} com consumo e valor real informados, a conta real ficou ${pct==null?'sem base de comparação':`${f1.format(Math.abs(pct))}% ${dif>=0?'acima':'abaixo'} do custo estimado`}. A diferença pode ter origem em impostos, bandeiras tarifárias, demanda contratada, taxas ou em uma tarifa configurada diferente da real. O painel não calcula esses itens.</p>`:
+    '<p class="note">Há valores reais informados, mas os meses não têm consumo para estimar o custo.</p>';
+  const lim=CONFIG.limiares.atencao,exp=S.filter(x=>(x.vCusto!=null&&x.vCusto>=lim)||(x.vReal!=null&&x.vReal>=lim));
+  if(exp.length)res.innerHTML+=`<div class="callout warn" style="margin-bottom:12px"><b>Meses com aumento expressivo nos gastos</b><p>${exp.map(x=>`${esc(x.mes)}: ${x.vCusto!=null&&x.vCusto>=lim?`custo estimado ${pc(x.vCusto)}`:''}${x.vCusto!=null&&x.vCusto>=lim&&x.vReal!=null&&x.vReal>=lim?'; ':''}${x.vReal!=null&&x.vReal>=lim?`valor real ${pc(x.vReal)}`:''}`).join(' · ')}. Variação contra o mês anterior, com o limiar de atenção de +${lim}%. É um ponto para investigar, não uma causa.</p></div>`;
+  mk('c-real',{type:'bar',data:{labels:S.map(x=>ab(x.i)),datasets:[
+    {label:'Custo estimado',data:S.map(x=>x.custo),backgroundColor:css('--accent'),borderRadius:4,maxBarThickness:34},
+    {label:'Valor real informado',data:S.map(x=>x.real),backgroundColor:css('--ink'),borderRadius:4,maxBarThickness:34}]},
+    options:{interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{title:i=>S[i[0].dataIndex].mes,label:c=>c.parsed.y==null?`${c.dataset.label}: não informado`:`${c.dataset.label}: ${brl(c.parsed.y)}`,
+      afterBody:it=>{const x=S[it[0].dataIndex];return x.difReal==null?'':`Diferença: ${x.difReal>=0?'+':'−'}${brl(Math.abs(x.difReal))} (${pc(x.difPct)})`;}}}},scales:{y:Object.assign({},axisK,{title:{display:true,text:'R$'}}),x:axisX}}});
+  $('#real-table').innerHTML=`<table><thead><tr><th>Mês</th><th class="n">Consumo</th><th class="n col-est">Custo estimado</th><th class="n col-real">Valor real</th><th class="n col-dif">Diferença (R$)</th><th class="n col-dif">Diferença (%)</th><th class="n">Real ÷ kWh</th><th class="n">Estimado vs. mês anterior</th><th class="n">Real vs. mês anterior</th></tr></thead><tbody>${S.map(x=>
+    `<tr><td>${esc(x.mes)}</td><td class="n">${x.sem?'sem dados':kwhF(x.kwh)}</td><td class="n col-est">${x.custo==null?'—':brl2(x.custo)}</td><td class="n col-real">${x.real==null?'<span class="ks">não informado</span>':brl2(x.real)}</td>
+    <td class="n col-dif">${x.difReal==null?'—':`<span class="${x.difReal>0?'up':'dn'}">${x.difReal>=0?'+':'−'}${brl2(Math.abs(x.difReal))}</span>`}</td><td class="n col-dif">${x.difPct==null?'—':pc(x.difPct)}</td>
+    <td class="n">${x.real!=null&&x.kwh>0?brl2(x.real/x.kwh)+'/kWh':'—'}</td>
+    <td class="n">${x.vCusto==null?'—':`<span class="${x.vCusto>=lim?'up c':x.vCusto>0?'up':'dn'}">${pc(x.vCusto)}</span>`}</td><td class="n">${x.vReal==null?'—':`<span class="${x.vReal>=lim?'up c':x.vReal>0?'up':'dn'}">${pc(x.vReal)}</span>`}</td></tr>`).join('')}</tbody></table>
+    <p class="note">“Real ÷ kWh” é o valor da conta dividido pelo consumo do mês (custo efetivo por kWh), calculado só com os números que você informou.</p>`;
+}
+/* ---------- recomendações: cada uma traz alerta, indicador, possíveis explicações (hipóteses), ação, prioridade e status ---------- */
+const AC_SETOR={
+  clim:'Verificar manutenção, regulagem de temperatura e horários de uso dos aparelhos de ar-condicionado e comparar com os meses anteriores.',
+  ilum:'Avaliar horários de uso da iluminação e o tipo de lâmpadas e luminárias em uso.',
+  info:'Checar equipamentos de informática e laboratórios mantidos ligados fora do uso.',
+  adm:'Revisar o uso de equipamentos de escritório e a rotina de desligamento ao fim do expediente.',
+  outros:'Mapear as cargas deste grupo para identificar o que mudou.'
+};
+const EXPL_GERAL=['maior utilização de equipamentos','aumento de atividades, de alunos ou de funcionários','alteração no horário de funcionamento','evento realizado no período','mudança sazonal, como calor mais intenso','equipamentos novos instalados'];
+let RECS=[];
+function recomendacoes(C){
+  const f=C.foco,R=[],mes=rot(DATA[f.i]),m=DATA[f.i],esco=nomeSetor(state.setor);
+  const pr=c=>c==='critico'?'Alta':'Média';
+  const reg=[];
+  if((m.ctx||[]).length)reg.push('contexto registrado: '+m.ctx.map(id=>(CTX.find(c=>c.id===id)||{t:id}).t.toLowerCase()).join(', '));
+  if(m.inv)reg.push('situação registrada: '+invTxt(m).toLowerCase());
+  if(m.obs)reg.push('observação do responsável: “'+m.obs+'”');
+  if(!f.sem&&f.dev!=null&&fora(f.cls)){
+    const ex=[...EXPL_GERAL];
+    R.push({id:'r-aum-'+f.i+'-'+state.setor,tipo:'Constatação + hipóteses',prio:m.inv==='justificada'?'Baixa':pr(f.cls),
+      titulo:`Aumento relevante do consumo em ${mes} (${esco})`,
+      alerta:`Aumento relevante do consumo mensal, classificado como ${CLS[f.cls].t}.`,
+      ind:`${kwhF(f.kwh)} no mês, ${pc(f.dev)} em relação à média histórica de ${kwhF(f.hist)} (limiar de atenção: +${CONFIG.limiares.atencao}%). Custo adicional estimado: ${brl(f.extraCusto)}.`,
+      expl:ex,reg,
+      acao:'Verificar os horários de utilização dos equipamentos e comparar a rotina do período com os meses anteriores. Registrar o que mudou na aba Monitoramento.'});
+  }
+  if(!f.sem&&f.dev!=null&&fora(f.cls)){
+    const so=setoresMes(f.i).filter(x=>fora(x.cls)&&x.extra>0).sort((a,b)=>b.extra-a.extra);
+    const exc=sum(setoresMes(f.i).map(x=>x.extra));
+    const aviso=CONFIG.fonteSetores==='medido'?'Os valores vêm de medidores individuais.':`Atenção: a divisão por setor é ${FONTES[CONFIG.fonteSetores].rot}, portanto este sinal é fraco e serve só para orientar a investigação.`;
+    so.slice(0,2).forEach(x=>R.push({id:'r-set-'+x.id+'-'+f.i,tipo:'Hipótese',prio:CONFIG.fonteSetores==='medido'?pr(x.cls):'Média',
+      titulo:`Investigar ${x.nome} em ${mes}`,
+      alerta:`${x.nome} concentrou parte do aumento do mês, segundo os dados por setor informados.`,
+      ind:`${kwhF(x.kwh)}, ${pc(x.dev)} sobre a média do próprio setor${exc>0?` (cerca de ${f0.format(Math.round(x.extra/exc*100))}% do excedente líquido do mês)`:''}. ${aviso}`,
+      expl:['mudança no uso do setor','equipamento ligado por mais tempo','atividade ou evento específico do setor','erro ou imprecisão na divisão por setor'],reg:[],
+      acao:AC_SETOR[x.id]}));
+  }
+  const med=C.sel.length?sum(C.sel.map(x=>x.custo))/C.sel.length:0,orc=orcAtual();
+  if(C.sel.length&&orc>0&&med>orc)R.push({id:'r-orc',tipo:'Constatação',prio:med>orc*1.1?'Alta':'Média',
+    titulo:'Gasto médio estimado acima do orçamento',alerta:'O custo médio estimado supera o orçamento mensal definido.',
+    ind:`Custo médio de ${brl(med)} contra orçamento de ${brl(orc)} por mês (${pc((med/orc-1)*100)}). Estimativa: kWh × tarifa.`,
+    expl:['orçamento definido abaixo do consumo habitual','aumento do consumo ou da tarifa','meses atípicos elevando a média'],reg:[],
+    acao:'Revisar o orçamento e identificar os meses que mais pesaram na média. Comparar o orçamento com a conta de energia real.'});
+  if(C.cob.semAno>0)R.push({id:'r-ano',tipo:'Qualidade dos dados',prio:'Média',titulo:'Informar o ano dos registros',alerta:'Há registros de consumo sem ano.',
+    ind:`${C.cob.semAno} de ${C.cob.n} registros com dados não têm ano.`,expl:['a planilha original não tinha a coluna de ano','dados cadastrados antes do campo de ano existir'],reg:[],
+    acao:'Informar o ano de cada registro na aba Dados. Sem ele, não é possível comparar o mesmo mês entre anos nem confirmar um ano completo.'});
+  if(C.nivel!=='adequado')R.push({id:'r-hist',tipo:'Qualidade dos dados',prio:C.nivel==='insuficiente'?'Alta':'Média',
+    titulo:'Ampliar o histórico de consumo',alerta:C.nivel==='insuficiente'?'Histórico insuficiente para classificar o consumo.':'Histórico limitado: a média histórica é pouco estável.',
+    ind:`${C.N} ${C.N===1?'mês':'meses'} com dados; o recomendado é ${CONFIG.idealHist} meses ou mais.`,
+    expl:['a base ainda é recente','faturas anteriores não foram cadastradas'],reg:[],
+    acao:'Cadastrar as faturas dos meses anteriores na aba Dados. Não preencher meses sem a fatura real.'});
+  if(CONFIG.fonteSetores!=='medido')R.push({id:'r-medicao',tipo:'Qualidade dos dados',prio:'Baixa',
+    titulo:'Confirmar a origem da divisão por setor',alerta:`A divisão por setor é ${FONTES[CONFIG.fonteSetores].rot}.`,
+    ind:`Origem informada: ${FONTES[CONFIG.fonteSetores].d}.`,expl:['a conta de energia informa só o total da unidade'],reg:[],
+    acao:'Avaliar a instalação de medidores por setor ou documentar a metodologia de estimativa na aba Dados.'});
+  R.push({id:'r-hor-'+f.i,tipo:'Hipótese',prio:!f.sem&&fora(f.cls)?'Média':'Baixa',titulo:'Verificar equipamentos ligados fora do horário de funcionamento',
+    alerta:'Verificação preventiva de uso fora do expediente.',ind:'A base mensal não tem medição por horário, então os dados não permitem confirmar nem descartar esta hipótese.',
+    expl:['equipamentos em espera ou esquecidos ligados','climatização ou iluminação sem desligamento automático'],reg:[],
+    acao:'Fazer uma ronda ao fim do expediente e nos fins de semana para ver o que permanece ligado.'});
+  const fl=C.A.filter(x=>fora(x.cls));
+  R.push({id:'r-mes',tipo:'Constatação',prio:fl.length?'Média':'Baixa',titulo:'Acompanhar os meses com maiores variações',
+    alerta:fl.length?'Há meses fora do padrão histórico.':'Nenhum mês fora do padrão histórico.',
+    ind:fl.length?`Meses fora do padrão: ${fl.map(x=>`${esc(x.mes)} (${pc(x.dev)})`).join(', ')}.`:'Todos os meses classificados estão dentro do padrão.',expl:[],reg:[],
+    acao:fl.length?'Registrar o que ocorreu nesses meses para reconhecer o padrão se ele voltar.':'Manter o acompanhamento mensal.'});
+  if(C.sel.length){
+    const mm=sum(C.sel.map(x=>x.kwh))/C.sel.length;
+    R.push({id:'r-meta',tipo:'Constatação',prio:mm>C.meta*1.05?'Média':'Baixa',titulo:mm>C.meta?'Média mensal acima da meta':'Média mensal dentro da meta',
+      alerta:mm>C.meta?'Consumo médio acima da meta de consumo.':'Consumo médio dentro da meta.',ind:`Média dos meses selecionados: ${kwhF(mm)}; meta: ${kwhF(C.meta)} (${pc((mm/C.meta-1)*100)}).`,expl:[],reg:[],
+      acao:mm>C.meta?'Definir quais usos podem ser reduzidos para aproximar o consumo da meta.':'Manter as práticas atuais e revisar a meta periodicamente.'});
+  }
+  const ord={Alta:0,'Média':1,Baixa:2};
+  R.sort((a,b)=>ord[a.prio]-ord[b.prio]);
+  RECS=R;return R;
+}
+V.melhorias=function(C){
+  const R=recomendacoes(C),f=C.foco;
+  $('#rec-sum').innerHTML=`Mês em foco: <b>${nm(f.i)}</b> · Setor: ${esc(nomeSetor(state.setor))}. ${R.length} recomendações, ${R.filter(r=>r.prio==='Alta').length} de prioridade alta. Elas são pontos de investigação: “Constatação” é o que os dados mostram e “Hipótese” é uma causa possível que ainda precisa ser verificada.`;
+  const pcl={Alta:'crit','Média':'warn',Baixa:'info'};
+  $('#rec-list').innerHTML=R.map(r=>{
+    const p=state.plano[r.id];
+    return `<article class="card rec"><div class="rec-h"><span class="pill ${/Hip/.test(r.tipo)?'mute':'info'}">${r.tipo}</span><span class="pill ${pcl[r.prio]}">Prioridade ${r.prio}</span><span class="pill ${p?(p.status==='Concluída'?'ok':'warn'):'mute'}" data-recst="${esc(r.id)}">${p?p.status:'Não iniciada'}</span></div>
+    <h3>${r.titulo}</h3><dl><dt>Alerta</dt><dd>${r.alerta}</dd><dt>Indicador que motivou o alerta</dt><dd>${r.ind}</dd>
+    ${r.expl.length?`<dt>Possíveis explicações (hipóteses, não confirmadas)</dt><dd>${r.expl.map(esc).join('; ')}.</dd>`:''}
+    ${r.reg.length?`<dt>Registrado pelo responsável</dt><dd>${r.reg.map(esc).join('. ')}.</dd>`:''}
+    <dt>Ação recomendada</dt><dd>${r.acao}</dd></dl>
+    <button class="btn sm ${p?'ghost':''}" data-act="plano" data-id="${esc(r.id)}">${p?'Remover do plano':'Adicionar ao plano'}</button></article>`;}).join('');
+  desenharPlano();
+};
+
+/* ---------- simulador ---------- */
+function simBaseKwh(C){
+  if(state.simBase==='custom')return Math.max(0,state.simCustom);
+  if(state.simBase==='media')return C.sel.length?sum(C.sel.map(x=>x.kwh))/C.sel.length:0;
+  return C.foco.sem?0:C.foco.kwh;
+}
+V.simulador=function(C){
+  const base=simBaseKwh(C),p=clamp(state.simPct,0,100),t=state.tarifa;
+  const novo=base*(1-p/100),ek=base-novo,er=ek*t;
+  $('#sim-pct-v').textContent=f1.format(p)+'%';
+  if(document.activeElement!==$('#sim-pct'))$('#sim-pct').value=p;
+  if(document.activeElement!==$('#sim-pct-n'))$('#sim-pct-n').value=p;
+  $('#sim-base').value=state.simBase;$('#sim-custom-w').hidden=state.simBase!=='custom';
+  if(document.activeElement!==$('#sim-custom'))$('#sim-custom').value=state.simCustom;
+  const f=C.foco,needH=state.simBase==='foco'&&f.hist!=null&&base>f.hist?(1-f.hist/base)*100:null,needM=C.meta>0&&base>C.meta?(1-C.meta/base)*100:null;
+  const pre=[5,10,15,20,30].map(v=>[v+'%',v]);
+  if(needH!=null)pre.push(['Voltar à média histórica',Math.round(needH*10)/10]);
+  if(needM!=null)pre.push(['Atingir a meta',Math.round(needM*10)/10]);
+  $('#sim-presets').innerHTML=pre.map(([l,v])=>`<button class="chip pre" data-act="sim-pre" data-v="${v}" aria-pressed="${v===p}">${l}</button>`).join('');
+  const orc=orcAtual(),custoAtual=base*t,custoNovo=novo*t;
+  $('#sim-res').innerHTML=`<p><span class="tag-sim">Simulação</span> Base: ${base>0?kwhF(base):'sem dados para a base escolhida'} por mês × ${brl2(t)}/kWh, com redução de ${f1.format(p)}%.</p>
+    <div class="sim-out"><div><span>Custo mensal atual (estimado)</span><b>${brl(custoAtual)}</b></div><div><span>Consumo após a redução</span><b>${kwhF(novo)}</b></div><div class="good"><span>Economia de energia por mês</span><b>${kwhF(ek)}</b></div>
+    <div class="good"><span>Economia financeira por mês</span><b>${brl(er)}</b></div><div><span>Custo mensal após a redução</span><b>${brl(custoNovo)}</b></div>
+    <div class="good"><span>Projeção anual (12 meses)</span><b>${brl(er*12)}</b></div></div>
+    <p class="note">${orc>0?`Orçamento mensal de ${brl(orc)}: custo ${custoAtual>orc?'acima':'dentro'} do orçamento hoje e ${custoNovo>orc?'ainda acima':'dentro'} dele após a redução. `:''}${needH!=null?`Para voltar à média histórica de ${nm(f.i)} seria preciso reduzir cerca de ${f1.format(needH)}%. `:''}${needM!=null?`Para atingir a meta de ${kwhF(C.meta)} seria preciso reduzir cerca de ${f1.format(needM)}%. `:''}Valores simulados, não são economias já realizadas. A estimativa simplificada (kWh × tarifa) não representa necessariamente o valor final da conta de energia, que pode ter outros componentes e cobranças. A projeção anual supõe o mesmo consumo todos os meses.</p>`;
+  mk('c-sim',{type:'bar',data:{labels:['Consumo atual','Após a redução'],datasets:[
+    {label:'kWh',data:[base,novo],backgroundColor:[css('--ink-3'),css('--ok')],borderRadius:6,maxBarThickness:90,order:2},
+    {type:'line',label:'Meta mensal',data:[C.meta,C.meta],borderColor:css('--accent'),borderDash:[6,4],borderWidth:2,pointRadius:0,order:1}]},
+    options:{plugins:{tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${f0.format(Math.round(c.parsed.y))} kWh`}}},scales:{y:Object.assign({},axisK,{title:{display:true,text:'kWh'}}),x:axisX}}});
+};
+
+/* ---------- plano de ações: responsável, datas, custo, economia esperada (projeção) e alcançada (informada) ---------- */
+const hojeISO=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;};
+const fmtDia=iso=>iso?iso.split('-').reverse().join('/'):'—';
+const keyISO=iso=>{const p=(iso||'').split('-');return p.length===3?+p[0]*12+ +p[1]-1:null;};
+function planoAtraso(p){return !!(p.prazo&&p.prazo<hojeISO()&&p.status!=='Concluída');}
+/* Média mensal do consumo da unidade antes e depois do início da ação (só registros com mês, ano e consumo). */
+function antesDepois(p){
+  const k0=keyISO(p.inicio);if(k0===null)return null;
+  const R=DATA.map(m=>({k:keyMA(m),t:totalMes(m),m})).filter(r=>r.k!==null&&isNum(r.t));
+  const A=R.filter(r=>r.k<k0),D=R.filter(r=>r.k>=k0);
+  if(!A.length||!D.length)return{A,D,ok:false};
+  const a=sum(A.map(r=>r.t))/A.length,d=sum(D.map(r=>r.t))/D.length;
+  return{A,D,a,d,ok:true,delta:d-a,pct:a>0?(d/a-1)*100:null};
+}
+function planoCalc(id){
+  const p=state.plano[id];if(!p)return '';
+  const t=state.tarifa,ebrlCalc=p.ebrl==null&&p.ekwh!=null?p.ekwh*t:null,ebrl=p.ebrl!=null?p.ebrl:ebrlCalc;
+  let h='';
+  if(p.inicio&&p.prazo&&p.prazo<p.inicio)h+='<p class="err">O prazo é anterior à data de início. Confira as datas.</p>';
+  if(ebrlCalc!=null)h+=`<p class="ks">Economia financeira esperada calculada: ${brl2(ebrlCalc)}/mês (${f0.format(p.ekwh)} kWh × ${brl2(t)}), a partir da tarifa configurada. Preencha o campo acima para usar outro valor.</p>`;
+  if(p.custo!=null&&ebrl>0)h+=`<p class="ks"><b>Projeção:</b> retorno do investimento em cerca de ${f1.format(p.custo/ebrl)} meses (custo ÷ economia esperada). Não é resultado medido.</p>`;
+  if(p.custo!=null&&p.rbrl>0)h+=`<p class="ks"><b>Com o resultado informado:</b> retorno em cerca de ${f1.format(p.custo/p.rbrl)} meses.</p>`;
+  const ad=antesDepois(p);
+  if(!p.inicio)h+='<p class="ks">Informe a data de início para comparar o consumo antes e depois da ação.</p>';
+  else if(!ad)h+='<p class="ks">Para comparar antes e depois, os registros precisam ter mês e ano.</p>';
+  else if(!ad.ok)h+=`<p class="ks">Comparação antes/depois indisponível: há ${ad.A.length} ${ad.A.length===1?'mês':'meses'} com dados antes do início e ${ad.D.length} a partir dele. São necessários registros dos dois lados.</p>`;
+  else{
+    h+=`<div class="antdep"><span class="kl">Antes e depois (dados da base)</span><div class="mon" style="margin:6px 0"><div class="mm"><span>Antes (${ad.A.length} ${ad.A.length===1?'mês':'meses'})</span><b>${kwhF(ad.a)}</b></div><div class="mm"><span>Depois (${ad.D.length} ${ad.D.length===1?'mês':'meses'})</span><b>${kwhF(ad.d)}</b></div>
+      <div class="mm"><span>Variação medida</span><b class="${ad.delta>0?'up':'dn'}">${ad.pct==null?'—':pc(ad.pct)}</b></div><div class="mm"><span>Esperado</span><b>${p.ekwh!=null?'−'+kwhF(p.ekwh):'não informado'}</b></div></div>
+      <p class="ks">Média mensal do consumo da unidade. Esta é uma comparação de períodos, e não prova que a ação causou a variação: pessoas, horários, clima e eventos também mudam o consumo. Com ${ad.D.length<3?'poucos meses depois da ação, a leitura é preliminar':'estes meses, confira a sazonalidade'}.</p></div>`;
+  }
+  return h;
+}
+function planoResumo(){
+  const ids=Object.keys(state.plano),P=ids.map(i=>state.plano[i]);
+  if(!P.length)return '';
+  const conc=P.filter(p=>p.status==='Concluída').length,and=P.filter(p=>p.status==='Em andamento').length,atr=P.filter(planoAtraso).length;
+  const t=state.tarifa,eb=p=>p.ebrl!=null?p.ebrl:(p.ekwh!=null?p.ekwh*t:0);
+  const custo=sum(P.map(p=>p.custo||0)),esp=sum(P.map(eb)),real=sum(P.map(p=>p.rbrl||0)),nreal=P.filter(p=>p.rbrl!=null).length;
+  return `<div class="mon"><div class="mm"><span>Ações</span><b>${P.length}</b></div><div class="mm"><span>Concluídas</span><b>${conc} de ${P.length}</b></div><div class="mm"><span>Em andamento</span><b>${and}</b></div><div class="mm"><span>Atrasadas</span><b class="${atr?'up c':''}">${atr}</b></div></div>
+    <div class="track" style="margin:0 0 12px"><i style="width:${Math.round(conc/P.length*100)}%"></i></div>
+    <div class="mon"><div class="mm"><span>Custo estimado total</span><b>${brl(custo)}</b></div><div class="mm"><span>Economia esperada (projeção)</span><b>${brl(esp)}/mês</b></div><div class="mm"><span>Economia alcançada (informada)</span><b>${nreal?brl(real)+'/mês':'não informada'}</b></div><div class="mm"><span>Realizado ÷ esperado</span><b>${nreal&&esp>0?f0.format(real/esp*100)+'%':'—'}</b></div></div>
+    <p class="note" style="margin-top:0">Esperado é projeção. Alcançado é o resultado que o responsável informou depois de medir. Os dois nunca são somados.</p>`;
+}
+function planoItemHTML(id,n){
+  const p=state.plano[id],f=(k,t,extra)=>`id="pf-${n}-${k}" data-act="pf" data-id="${esc(id)}" data-k="${k}" ${extra||''}`;
+  const lab=(k,txt)=>`<label for="pf-${n}-${k}">${txt}</label>`;
+  return `<li class="acao"><div class="acao-h"><b>${esc(p.titulo)}</b><span id="ph-${n}" data-ph="${esc(id)}">${planoHead(id)}</span></div>
+    <div class="acao-grid">
+      <div class="fl">${lab('resp','Responsável pela ação')}<input type="text" ${f('resp')} value="${esc(p.resp)}" placeholder="Nome ou setor"></div>
+      <div class="fl">${lab('inicio','Data de início')}<input type="date" ${f('inicio')} value="${esc(p.inicio)}"></div>
+      <div class="fl">${lab('prazo','Prazo de conclusão')}<input type="date" ${f('prazo')} value="${esc(p.prazo)}"></div>
+      <div class="fl">${lab('status','Status da ação')}<select ${f('status')}>${STATUS_PLANO.map(s=>`<option${p.status===s?' selected':''}>${s}</option>`).join('')}</select></div>
+      <div class="fl">${lab('custo','Custo estimado da implementação (R$)')}<input type="number" min="0" step="10" ${f('custo')} value="${inpV(p.custo)}" placeholder="opcional"></div>
+      <div class="fl">${lab('ekwh','Economia esperada (kWh/mês) · projeção')}<input type="number" min="0" step="10" ${f('ekwh')} value="${inpV(p.ekwh)}" placeholder="opcional"></div>
+      <div class="fl">${lab('ebrl','Economia financeira esperada (R$/mês) · projeção')}<input type="number" min="0" step="1" ${f('ebrl')} value="${inpV(p.ebrl)}" placeholder="opcional"></div>
+    </div>
+    <div class="medido"><span class="kl">Resultado medido, informado pelo responsável</span>
+      <div class="acao-grid">
+        <div class="fl">${lab('rkwh','Economia alcançada (kWh/mês)')}<input type="number" min="0" step="10" ${f('rkwh')} value="${inpV(p.rkwh)}" placeholder="após medir"></div>
+        <div class="fl">${lab('rbrl','Economia alcançada (R$/mês)')}<input type="number" min="0" step="1" ${f('rbrl')} value="${inpV(p.rbrl)}" placeholder="após medir"></div>
+      </div></div>
+    <div class="fl" style="margin-top:10px">${lab('obs','Observações e resultados')}<textarea ${f('obs')} placeholder="O que foi feito, o que foi observado, próximos passos.">${esc(p.obs)}</textarea></div>
+    <div id="pc-${n}" data-pc="${esc(id)}" class="pcalc">${planoCalc(id)}</div>
+    <button class="lnk" data-act="plano-rm" data-id="${esc(id)}" data-conf="Confirmar remoção">Remover ação do plano</button></li>`;
+}
+function planoHead(id){
+  const p=state.plano[id];
+  return `<span class="pill ${p.status==='Concluída'?'ok':p.status==='Em andamento'?'info':'mute'}">${p.status}</span>${planoAtraso(p)?'<span class="pill crit">Atrasada</span>':''}${p.prazo?`<span class="ks">prazo ${fmtDia(p.prazo)}</span>`:''}`;
+}
+function desenharPlano(){
+  const ids=Object.keys(state.plano);
+  $('#plano-resumo').innerHTML=planoResumo();
+  $('#plano').innerHTML=ids.length?`<ul class="plan acoes">${ids.map((id,n)=>planoItemHTML(id,n)).join('')}</ul>`:'<p class="note" style="margin:0">Nenhuma ação no plano. Use “Adicionar ao plano” nas recomendações acima ou crie uma ação própria.</p>';
+}
+/* Atualiza só os blocos calculados, sem redesenhar os campos (preserva o foco do teclado). */
+function atualizarPlano(id){
+  $('#plano-resumo').innerHTML=planoResumo();
+  $$('[data-pc]').forEach(e=>{if(e.dataset.pc===id)e.innerHTML=planoCalc(id);});
+  $$('[data-ph]').forEach(e=>{if(e.dataset.ph===id)e.innerHTML=planoHead(id);});
+  $$('[data-recst]').forEach(e=>{if(e.dataset.recst===id){const p=state.plano[id];e.textContent=p?p.status:'Não iniciada';e.className='pill '+(p?(p.status==='Concluída'?'ok':'warn'):'mute');}});
+}
+/* ---------- aba Dados ---------- */
+const inpV=v=>v==null?'':v;
+const fmtData=iso=>{try{return new Date(iso).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});}catch(e){return iso;}};
+function csvOut(){
+  const h='Mes;Ano;Tarifa;Total;Climatizacao;Iluminacao;Informatica;Administrativo;Outros;ContaReal';
+  const c=v=>v==null?'':String(v).replace('.',',');
+  return [h,...DATA.map(m=>[m.mes,m.ano==null?'':m.ano,c(m.tarifa),c(m.total),...SETORES.map(s=>c(m.setores[s.id])),c(m.conta)].join(';'))].join('\n');
+}
+/* Painel de verificação e ferramentas de ano/ordem (redesenhado sem tocar nos campos da tabela). */
+function desenharValidacao(){
+  const Q=qualidade(),pn={erro:'crit',aviso:'warn',info:'info'},lb={erro:'Erro',aviso:'Atenção',info:'Informação'};
+  $('#dados-valid').innerHTML=Q.length?`<div class="ch"><h2>Verificação dos registros</h2><p class="cs">O painel confere datas, duplicados, zeros e valores ausentes. Nada é preenchido ou corrigido automaticamente.</p></div><ul class="vlist">${Q.map(q=>`<li><span class="pill ${pn[q.n]}">${lb[q.n]}</span><span><b>${q.t}.</b> ${esc(q.m)}</span></li>`).join('')}</ul>`:
+    `<div class="ch"><h2>Verificação dos registros</h2></div><p class="okmsg" style="margin:0">Nenhum problema encontrado nos ${DATA.length} registros.</p>`;
+  const semAno=DATA.filter(m=>!anoOk(m.ano)).length;
+  $('#ano-tools').innerHTML=`${semAno?`<div class="row"><div class="fl" style="max-width:200px"><label for="ano-aplicar">Ano para os ${semAno} registros sem ano</label><input type="number" id="ano-aplicar" min="${ANO_MIN}" max="${ANO_MAX}" step="1" placeholder="Ex.: ${new Date().getFullYear()}"></div><button class="btn ghost" data-act="ano-aplicar" data-conf="Confirmar: aplicar o ano">Aplicar a todos sem ano</button></div><p class="note">Use só se tiver certeza do ano. O painel não adivinha o ano. Você também pode preencher cada linha na tabela.</p>`:''}
+    <div class="row" style="margin-top:${semAno?10:0}px"><button class="btn ghost" data-act="ordenar"${DATA.every(m=>keyMA(m)!==null)?'':' disabled title="Todos os registros precisam ter mês e ano."'}>Ordenar por data</button></div>`;
+}
+V.dados=function(){
+  const mig=AVISO_MIG&&!AVISO_MIG.visto;
+  $('#dados-mig').hidden=!mig;
+  if(mig)$('#dados-mig').innerHTML=`<div class="callout ok"><b>Seus dados anteriores foram migrados</b><p>Os registros salvos neste navegador (versão ${esc(AVISO_MIG.de)}) foram convertidos para a nova estrutura, e nada foi apagado: a versão anterior continua guardada. A nova estrutura tem o campo <b>Ano</b>${DATA.some(m=>!anoOk(m.ano))?', que seus registros ainda não têm. Informe o ano abaixo para liberar a ordenação por data e a comparação entre anos':''}.</p><button class="btn sm" data-act="mig-ok">Entendi</button></div>`;
+  desenharValidacao();
+  $('#dados-tbl').innerHTML=`<thead><tr><th>Mês</th><th class="n">Ano</th><th class="n">Tarifa (R$/kWh)</th><th class="n">Total da unidade (kWh)</th>${SETORES.map(s=>`<th class="n">${esc(s.nome)} (kWh)</th>`).join('')}<th class="n">Conta real (R$)</th><th class="n">Custo estimado</th><th></th></tr></thead><tbody>${DATA.map((m,i)=>
+    `<tr><td><input type="text" class="mes" value="${esc(m.mes)}" data-i="${i}" data-k="mes" aria-label="Nome do mês da linha ${i+1}"></td>
+    <td class="n"><input type="number" class="ano" step="1" min="${ANO_MIN}" max="${ANO_MAX}" value="${inpV(m.ano)}" placeholder="ano" data-i="${i}" data-k="ano" aria-label="Ano de ${esc(m.mes)} (linha ${i+1})"></td>
+    <td class="n"><input type="number" step="0.01" min="0" value="${inpV(m.tarifa)}" data-i="${i}" data-k="tarifa" aria-label="Tarifa de ${esc(rot(m))}"></td>
+    <td class="n"><input type="number" step="10" min="0" value="${inpV(m.total)}" placeholder="vazio" data-i="${i}" data-k="total" aria-label="Total da unidade em ${esc(rot(m))}"></td>
+    ${SETORES.map(s=>`<td class="n"><input type="number" step="10" min="0" value="${inpV(m.setores[s.id])}" placeholder="vazio" data-i="${i}" data-k="${s.id}" aria-label="${esc(s.nome)} em ${esc(rot(m))}"></td>`).join('')}
+    <td class="n"><input type="number" step="0.01" min="0" value="${inpV(m.conta)}" placeholder="opcional" data-i="${i}" data-k="conta" aria-label="Valor real da conta de ${esc(rot(m))}"></td>
+    <td class="n" id="cus-${i}">${isNum(totalMes(m))?brl(totalMes(m)*(state.usarBase?m.tarifa:state.tarifa)):'sem dados'}</td>
+    <td><button class="lnk" data-act="del-mes" data-i="${i}" data-conf="Confirmar remoção"${DATA.length<=2?' disabled':''}>Remover</button></td></tr>`).join('')}</tbody>`;
+  $('#csv-out').value=csvOut();
+  const bk=lerBackup();
+  $('#backup-box').hidden=!bk;
+  if(bk)$('#backup-box').innerHTML=`<p class="note" style="margin:0">Há uma cópia de segurança de ${esc(fmtData(bk.t))} (${esc(bk.motivo||'antes de uma substituição')}). <button class="lnk" data-act="restaurar-backup" data-conf="Confirmar: voltar para a cópia">Restaurar essa cópia</button></p>`;
+  if(document.activeElement!==$('#meta-in'))$('#meta-in').value=Math.round(CONFIG.metaMensalKwh);
+  if(document.activeElement!==$('#orc-in2'))$('#orc-in2').value=CONFIG.orcamentoMensal;
+  $('#cfg-fonte').value=CONFIG.fonteSetores;
+  if(document.activeElement!==$('#cfg-metodo'))$('#cfg-metodo').value=CONFIG.metodoSetores;
+  $('#cfg-aviso').innerHTML=`${fonteBadge()} <span class="ks">${notaSetores()}</span>`;
+  $('#cfg-store').textContent=storageOk?'Os dados são salvos automaticamente neste navegador (armazenamento local) e não são enviados a nenhum servidor.':'O navegador bloqueou o armazenamento local. Suas alterações valem apenas até fechar ou atualizar a página. Copie o CSV abaixo para guardar os dados.';
+  $('#cfg-store').className=storageOk?'note':'err';
+};
+
+/* ---------- importação de CSV ---------- */
+const semAcento=s=>semAc(s).replace(/[^a-z0-9]/g,'');
+const COLS={mes:['mes','periodo','competencia','mesano','referencia'],ano:['ano','anoref','anodereferencia','year'],tarifa:['tarifa','tarifakwh','tarifarkwh','rkwh'],
+  total:['total','totalkwh','consumo','consumokwh','consumototal','totaldaunidade'],
+  clim:['climatizacao','clim','arcondicionado'],ilum:['iluminacao','ilum'],info:['informatica','info','informaticaelaboratorios','laboratorios'],adm:['administrativo','adm','administracao'],outros:['outros','outrosusos','outro'],
+  conta:['contareal','valordaconta','valorconta','conta','fatura','valorfatura','valorreal','valorpago','contadeenergia']};
+function detectarSep(linha){const q=linha.replace(/"[^"]*"/g,'');const sc=(q.match(/;/g)||[]).length,tb=(q.match(/\t/g)||[]).length,cm=(q.match(/,/g)||[]).length;return sc?';':tb?'\t':cm?',':';';}
+function splitLinha(l,sep){
+  const out=[];let cur='',q=false;
+  for(let i=0;i<l.length;i++){const ch=l[i];
+    if(ch==='"'){if(q&&l[i+1]==='"'){cur+='"';i++;}else q=!q;}
+    else if(ch===sep&&!q){out.push(cur);cur='';}else cur+=ch;}
+  out.push(cur);return out.map(x=>x.trim());
+}
+/* Lê o CSV sem importar nada. opts.anoPadrao: ano informado pelo usuário para linhas sem ano. */
+function parseCSV(txt,opts){
+  opts=opts||{};
+  const erros=[],avisos=[];
+  const L=String(txt).replace(/^﻿/,'').split(/\r?\n/).map((l,i)=>({n:i+1,t:l})).filter(x=>x.t.trim());
+  if(!L.length)return{erros:['Nenhum dado encontrado. Cole as linhas da planilha ou escolha um arquivo CSV.'],avisos,dados:null};
+  const sep=detectarSep(L[0].t),rows=L.map(x=>({n:x.n,c:splitLinha(x.t,sep)}));
+  const first=rows[0].c;
+  const temCab=first.slice(1).some(c=>c!==''&&isNaN(pnum(c)));
+  let map={},ini=0;
+  if(temCab){
+    ini=1;
+    first.forEach((h,j)=>{const k=semAcento(h);for(const id in COLS){if(COLS[id].includes(k)&&map[id]==null)map[id]=j;}});
+    const desc=first.filter((h,j)=>!Object.values(map).includes(j)&&h);
+    if(desc.length)avisos.push(`Colunas não reconhecidas e ignoradas: ${desc.join(', ')}.`);
+    if(map.mes==null)erros.push('Não encontrei a coluna do mês. Use um cabeçalho como “Mes”.');
+    if(map.total==null&&!SETORES.every(s=>map[s.id]!=null))erros.push('Informe a coluna “Total” (consumo da unidade) ou as cinco colunas de setores.');
+    if(map.tarifa==null)avisos.push(`Sem coluna de tarifa: usando ${brl2(state.tarifa)}/kWh, a tarifa configurada.`);
+  }else{
+    const w=first.length;
+    if(w>=8)map={mes:0,tarifa:1,total:2,clim:3,ilum:4,info:5,adm:6,outros:7};
+    else if(w===7)map={mes:0,tarifa:1,clim:2,ilum:3,info:4,adm:5,outros:6};
+    else if(w===3)map={mes:0,tarifa:1,total:2};
+    else if(w===2){map={mes:0,total:1};avisos.push(`Sem coluna de tarifa: usando ${brl2(state.tarifa)}/kWh, a tarifa configurada.`);}
+    else erros.push(`Formato não reconhecido (${w} coluna${w>1?'s':''}). Inclua uma primeira linha com os nomes das colunas, por exemplo: Mes; Ano; Tarifa; Total; Climatização; Iluminação; Informática; Administrativo; Outros; ContaReal.`);
+    if(!erros.length)avisos.push('Arquivo sem cabeçalho (formato antigo): as colunas foram interpretadas pela posição e não há coluna de ano.');
+  }
+  if(erros.length)return{erros,avisos,dados:null};
+  const out=[],linhas=[];
+  for(let r=ini;r<rows.length;r++){
+    const {n,c}=rows[r],ex=j=>j==null?'':(c[j]||'');
+    const mesTxt=ex(map.mes);
+    if(!mesTxt){erros.push(`Linha ${n}: o nome do mês está vazio.`);continue;}
+    const pm=parseMesAno(mesTxt);
+    let ano=null,anoOrigem='';
+    const aCel=ex(map.ano);
+    if(aCel!==''){const v=pnum(aCel);
+      if(isNaN(v)||!Number.isInteger(v)||!anoOk(v)){erros.push(`Linha ${n} (${mesTxt}): “${aCel}” não é um ano válido (use um valor entre ${ANO_MIN} e ${ANO_MAX}).`);continue;}
+      ano=v;anoOrigem='coluna';
+      if(pm.ano&&pm.ano!==v){erros.push(`Linha ${n}: o mês indica ${pm.ano}, mas a coluna Ano diz ${v}.`);continue;}
+    }else if(pm.ano){ano=pm.ano;anoOrigem='mes';}
+    else if(opts.anoPadrao){ano=opts.anoPadrao;anoOrigem='usuario';}
+    if(ano!=null&&!pm.mes){erros.push(`Linha ${n}: não reconheci o mês “${mesTxt}”. Use o nome (Janeiro) ou o número (1 a 12).`);continue;}
+    if(ano==null&&!pm.mes)avisos.push(`Linha ${n}: “${mesTxt}” não é um nome de mês reconhecido; o registro será mantido sem comparação entre anos.`);
+    const num=(j,rot2)=>{const s=ex(j);if(s==='')return null;const v=pnum(s);if(isNaN(v)){erros.push(`Linha ${n} (${mesTxt}): “${s}” não é um número válido em ${rot2}.`);return undefined;}
+      if(v<0){erros.push(`Linha ${n} (${mesTxt}): ${rot2} não pode ser negativo.`);return undefined;}return v;};
+    let tarifa=num(map.tarifa,'Tarifa');
+    if(tarifa===null){tarifa=state.tarifa;if(map.tarifa!=null)avisos.push(`Linha ${n} (${mesTxt}): tarifa vazia, usando ${brl2(state.tarifa)}/kWh.`);}
+    const total=num(map.total,'Total'),conta=num(map.conta,'ContaReal'),set={};
+    SETORES.forEach(s=>{set[s.id]=num(map[s.id],s.nome);});
+    if(tarifa===undefined||total===undefined||conta===undefined||Object.values(set).includes(undefined))continue;
+    if(tarifa<=0||tarifa>10)avisos.push(`Linha ${n} (${mesTxt}): tarifa de ${brl2(tarifa)}/kWh é incomum. Confira o valor.`);
+    const sv=SETORES.map(s=>set[s.id]),todos=sv.every(x=>x!==null),alg=sv.some(x=>x!==null);
+    if(total===null&&!todos)avisos.push(`Linha ${n} (${mesTxt}): sem consumo informado. O mês será mantido como “sem dados” e não conta como zero.`);
+    if(total===0||(total===null&&todos&&sum(sv)===0))avisos.push(`Linha ${n} (${mesTxt}): consumo igual a zero. Confirme se está correto; se faltar a informação, deixe a célula vazia.`);
+    if(total!==null&&todos&&Math.abs(sum(sv)-total)/Math.max(total,1)>.02)avisos.push(`Linha ${n} (${mesTxt}): a soma dos setores (${f0.format(sum(sv))} kWh) difere do total (${f0.format(total)} kWh). O total será a referência.`);
+    if(alg&&!todos&&total!==null)avisos.push(`Linha ${n} (${mesTxt}): alguns setores estão vazios e ficarão sem dados.`);
+    const reg=normMes({mes:mesTxt,ano,tarifa,total,conta,setores:set});
+    out.push(reg);linhas.push({n,anoOrigem,mesTxt});
+  }
+  /* datas inconsistentes: mês repetido no mesmo ano (ou repetido sem ano) */
+  const vistos={};
+  out.forEach((m,k)=>{
+    const chave=keyMA(m)!==null?'k'+keyMA(m):(anoOk(m.ano)?null:'n'+semAc(m.mes));
+    if(!chave)return;
+    if(vistos[chave]!==undefined){
+      const l1=linhas[vistos[chave]].n,l2=linhas[k].n;
+      erros.push(keyMA(m)!==null?`Linhas ${l1} e ${l2}: ${rot(m)} aparece duas vezes. Remova uma das linhas ou corrija o ano.`:
+        `Linhas ${l1} e ${l2}: “${m.mes}” aparece duas vezes sem ano. Adicione a coluna Ano para distinguir os registros.`);
+    }else vistos[chave]=k;
+  });
+  const semAno=out.filter(m=>!anoOk(m.ano)).length,doUsuario=linhas.filter(l=>l.anoOrigem==='usuario').length;
+  if(doUsuario)avisos.push(`O ano ${opts.anoPadrao} foi aplicado a ${doUsuario} linha(s) sem ano, conforme você informou.`);
+  if(semAno)avisos.push(`${semAno} registro(s) sem ano. Eles serão importados, mas não poderão ser ordenados por data nem comparados entre anos. Informe o ano no campo abaixo ou depois, na aba Dados.`);
+  if(!erros.length){
+    if(out.length<2)erros.push('São necessários pelo menos 2 meses para a importação.');
+    const cd=out.filter(m=>isNum(totalMes(m))).length;
+    if(cd<CONFIG.minHist)avisos.push(`Apenas ${cd} mês(es) com dados: o histórico será considerado insuficiente (mínimo de ${CONFIG.minHist}).`);
+    if(out.every(m=>keyMA(m)!==null)&&out.some((m,k)=>k&&keyMA(m)<keyMA(out[k-1])))avisos.push('As linhas não estão em ordem de data e serão ordenadas ao importar.');
+  }
+  return{erros,avisos,dados:erros.length?null:out};
+}
+let PENDENTE=null;
+function lerAnoCSV(){const v=pnum($('#csv-ano').value);return anoOk(v)&&Number.isInteger(v)?v:null;}
+function mostrarVerificacao(r){
+  const m=$('#csv-msg'),b=$('#csv-confirm');PENDENTE=null;b.hidden=true;
+  const lista=(a,t)=>a.length?`<p><b>${t}</b></p><ul class="msgs">${a.slice(0,14).map(x=>`<li>${esc(x)}</li>`).join('')}${a.length>14?`<li>… e mais ${a.length-14}.</li>`:''}</ul>`:'';
+  if(r.erros.length){m.className='err';m.innerHTML=`<p><b>Nada foi importado.</b> Corrija os problemas abaixo e verifique novamente.</p>${lista(r.erros,'Erros')}${lista(r.avisos,'Avisos')}`;return;}
+  PENDENTE=r.dados;b.hidden=false;m.className='okmsg';
+  m.innerHTML=`<p><b>${r.dados.length} meses prontos para importar</b> (${r.dados.filter(x=>isNum(totalMes(x))).length} com dados). Isto substitui os dados atuais; uma cópia de segurança será guardada e poderá ser restaurada.</p>${lista(r.avisos,'Avisos para conferir')}`;
+}
+function lerArquivo(file){
+  const mostrar=t=>{$('#csv-in').value=t;mostrarVerificacao(parseCSV(t,{anoPadrao:lerAnoCSV()}));};
+  const rd=new FileReader();
+  rd.onload=()=>{const t=String(rd.result);
+    if(t.includes(String.fromCharCode(65533))){const r2=new FileReader();r2.onload=()=>mostrar(String(r2.result));r2.readAsText(file,'windows-1252');return;}
+    mostrar(t);};
+  rd.onerror=()=>{$('#csv-msg').className='err';$('#csv-msg').textContent='Não foi possível ler o arquivo. Tente salvar a planilha novamente como CSV.';};
+  rd.readAsText(file,'utf-8');
+}
+/* ---------- relatório de eficiência energética (tela e impressão) ---------- */
+function svgBarras(S,C){
+  if(!S.length)return '';
+  const W=720,H=230,ml=48,mr=12,mt=14,mb=40,iw=W-ml-mr,ih=H-mt-mb;
+  const max=Math.max(...S.map(x=>x.kwh),C.meta>0?C.meta:0,1)*1.12,y=v=>mt+ih-(v/max)*ih,bw=iw/S.length,barW=Math.min(46,bw*.62);
+  const ticks=[0,.25,.5,.75,1].map(t=>Math.round(max/1.12*t/100)*100);
+  const grid=[...new Set(ticks)].map(v=>`<line x1="${ml}" x2="${W-mr}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" style="stroke:var(--line)" stroke-width="1"/><text x="${ml-6}" y="${(y(v)+4).toFixed(1)}" text-anchor="end" style="fill:var(--ink-3)" font-size="10">${f0.format(v)}</text>`).join('');
+  const bars=S.map((x,k)=>{const cx=ml+bw*k+bw/2,cor=x.cls==='indef'?'--ink-3':'--'+CLS[x.cls].c;
+    return `<rect x="${(cx-barW/2).toFixed(1)}" y="${y(x.kwh).toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(0,ih-(y(x.kwh)-mt)).toFixed(1)}" rx="3" style="fill:var(${cor})"/>`+
+      (S.length<=14?`<text x="${cx.toFixed(1)}" y="${(y(x.kwh)-4).toFixed(1)}" text-anchor="middle" style="fill:var(--ink-2)" font-size="10">${f0.format(Math.round(x.kwh))}</text>`:'')+
+      `<text x="${cx.toFixed(1)}" y="${H-mb+14}" text-anchor="middle" style="fill:var(--ink-2)" font-size="10">${esc(ab(x.i))}</text>`;}).join('');
+  const meta=C.meta>0?`<line x1="${ml}" x2="${W-mr}" y1="${y(C.meta).toFixed(1)}" y2="${y(C.meta).toFixed(1)}" style="stroke:var(--accent)" stroke-width="2" stroke-dasharray="6 4"/><text x="${W-mr}" y="${(y(C.meta)-5).toFixed(1)}" text-anchor="end" style="fill:var(--accent)" font-size="10">meta ${f0.format(Math.round(C.meta))} kWh</text>`:'';
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Consumo mensal em kWh, colorido pela classificação" class="rel-svg">${grid}${bars}${meta}<text x="${ml}" y="${H-4}" style="fill:var(--ink-3)" font-size="10">Barras: verde normal, amarelo atenção, vermelho crítico. Linha tracejada: meta.</text></svg>`;
+}
+function relSetores(S){
+  const rows=SETORES.map(st=>{const v=S.map(x=>DATA[x.i].setores[st.id]).filter(isNum);return{nome:st.nome,n:v.length,tot:sum(v)};});
+  const comDados=rows.filter(r=>r.n>0);
+  if(!comDados.length)return '<p class="rel-vazio">Sem dados por setor para o período selecionado.</p>';
+  const T=sum(comDados.map(r=>r.tot));
+  const orden=[...rows].sort((a,b)=>b.tot-a.tot);
+  return `<p class="rel-nota">${fonteBadge()} ${notaSetores()}</p>
+    <table><thead><tr><th>Setor</th><th class="n">Consumo no período</th><th class="n">Participação</th><th class="n">Meses com dado</th></tr></thead><tbody>${orden.map(r=>
+      `<tr><td>${esc(r.nome)}</td><td class="n">${r.n?kwhF(r.tot):'sem dados'}</td><td class="n">${r.n&&T>0?f1.format(r.tot/T*100)+'%':'—'}</td><td class="n">${r.n} de ${S.length}</td></tr>`).join('')}</tbody></table>
+    ${T>0?'':'<p class="rel-nota">O consumo setorial total é zero: não é possível calcular participação percentual.</p>'}
+    <p class="rel-nota">Participação sobre a soma dos setores com dados informados, e não sobre o total da unidade.</p>`;
+}
+V.relatorio=function(C){
+  const S=C.sel,f=C.foco,ix=indice(C,f.i),hoje=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  const pr=$('#rel-print');pr.hidden=!(window.top===window.self);
+  const per=!S.length?'sem meses com dados selecionados':S.length===1?S[0].mes:`${S[0].mes} a ${S[S.length-1].mes}`;
+  const tot=sum(S.map(x=>x.kwh)),cus=sum(S.map(x=>x.custo)),med=S.length?tot/S.length:null;
+  const R=S.filter(x=>x.real!=null),real=sum(R.map(x=>x.real));
+  const orc=orcAtual(),conf={normal:0,atencao:0,critico:0,indef:0};S.forEach(x=>conf[x.cls]++);
+  const an=S.filter(x=>fora(x.cls)),potKwh=sum(S.filter(x=>fora(x.cls)&&x.extraKwh>0).map(x=>x.extraKwh)),potBrl=sum(S.filter(x=>fora(x.cls)&&x.extraCusto>0).map(x=>x.extraCusto));
+  const P=Object.keys(state.plano).map(i=>state.plano[i]),t=state.tarifa,eb=p=>p.ebrl!=null?p.ebrl:(p.ekwh!=null?p.ekwh*t:0);
+  const Q=qualidade(),recs=recomendacoes(C);
+  const sec=(t2,b)=>`<section class="rel-sec"><h2>${t2}</h2>${b}</section>`;
+  const kv=(a,b)=>`<tr><th scope="row">${a}</th><td>${b}</td></tr>`;
+  const kp=(l,v,s)=>`<div class="rel-kpi"><span>${l}</span><b>${v}</b>${s?`<small>${s}</small>`:''}</div>`;
+  let h=`<header class="rel-head"><div class="rel-brand"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2F6FDB"/><path d="M17.5 6 9 18h6l-1.5 8L23 13.5h-6z" fill="#fff"/></svg><div><b>Energia em Foco</b><small>Relatório de eficiência energética</small></div></div><p class="rel-data">Gerado em ${hoje}</p></header>`;
+  if(ehPadrao())h+='<p class="rel-aviso">Este relatório usa dados simulados para demonstração. Nenhum valor representa uma instituição real.</p>';
+  h+=sec('1. Período analisado',`<table class="rel-kv"><tbody>${kv('Período',esc(per))}${kv('Meses com dados no período',`${S.length}`+(C.cob.anos.length?` · ${C.cob.anos.length===1?'ano '+C.cob.anos[0]:'anos '+C.cob.anos[0]+' a '+C.cob.anos[C.cob.anos.length-1]}`:' · ano não informado'))}${kv('Escopo',esc(nomeSetor(state.setor)))}${kv('Tarifa utilizada',state.usarBase?'tarifa de cada mês da base':brl2(state.tarifa)+'/kWh (configurada)')}${kv('Qualidade do histórico',`<div class="rel-hist">${avisoHist(C)}</div>`)}</tbody></table>`);
+  h+=sec('2. Resumo',`<div class="rel-kpis">${kp('Consumo total',S.length?kwhF(tot):'sem dados')}${kp('Média mensal',med==null?'sem dados':kwhF(med),'meta: '+(C.meta>0?kwhF(C.meta):'não definida'))}${kp('Custo estimado',S.length?brl(cus):'sem dados','kWh × tarifa')}${kp('Valor real informado',R.length?brl(real):'não informado',R.length?`${R.length} ${R.length===1?'mês':'meses'} com valor`:'sem valores na base')}${kp('Orçamento mensal',orc>0?brl(orc):'não definido')}${kp('Índice de Atenção',ix?`${ix.valor}/100`:'indisponível',ix?ix.cls.t+' · '+esc(f.mes):'dados insuficientes')}</div>`);
+  h+=sec('3. Evolução histórica',`${S.length?svgBarras(S,C):'<p class="rel-vazio">Sem meses com dados no período.</p>'}${S.length?`<table><thead><tr><th>Mês</th><th class="n">Consumo</th><th class="n">Vs. média histórica</th><th>Classificação</th><th class="n">Vs. mesmo mês do ano anterior</th><th class="n">Custo estimado</th><th class="n">Valor real</th></tr></thead><tbody>${S.map(x=>`<tr><td>${esc(x.mes)}</td><td class="n">${kwhF(x.kwh)}</td><td class="n">${x.dev==null?'—':pc(x.dev)}</td><td>${pill(x.cls)}</td><td class="n">${x.vAno==null?'—':pc(x.vAno)}</td><td class="n">${brl(x.custo)}</td><td class="n">${x.real==null?'não informado':brl(x.real)}</td></tr>`).join('')}</tbody></table>`:''}`);
+  h+=sec('4. Setores com maior consumo',relSetores(S));
+  h+=sec('5. Indicadores de atenção',`${ix?`<p><b>Índice de Atenção Energética de ${esc(f.mes)}: ${ix.valor}/100 (${ix.cls.t}).</b> Quanto menor, maior a atenção necessária.</p><table><thead><tr><th>Fator</th><th class="n">Medido</th><th class="n">Peso</th><th class="n">Pontos descontados</th></tr></thead><tbody>${ix.F.map(x=>`<tr><td>${x.nome}</td><td class="n">${pc(x.v)}</td><td class="n">${x.peso}</td><td class="n">${f1.format(x.pen)}</td></tr>`).join('')}</tbody></table>`:`<p class="rel-vazio">Índice indisponível para ${esc(f.mes)}: ${f.sem?'o mês não tem dados':'o histórico é insuficiente (mínimo de '+CONFIG.minHist+' meses com dados)'}.</p>`}
+    <p>Classificação dos ${S.length} meses do período: ${conf.normal} normal, ${conf.atencao} atenção, ${conf.critico} crítico${conf.indef?`, ${conf.indef} sem base de comparação`:''}. Critérios: atenção a partir de +${CONFIG.limiares.atencao}% e crítico a partir de +${CONFIG.limiares.critico}% sobre a média histórica.</p>
+    <p class="rel-nota">O índice é um indicador próprio e demonstrativo do projeto. Não é uma métrica científica, certificada ou oficial.</p>`);
+  h+=sec('6. Principais anomalias',an.length?`<table><thead><tr><th>Mês</th><th class="n">Consumo</th><th class="n">Média histórica</th><th class="n">Variação</th><th>Classificação</th><th class="n">Custo adicional estimado</th><th>Registro do responsável</th></tr></thead><tbody>${an.map(x=>{const m=DATA[x.i],ev=evidencia(x);
+      return `<tr><td>${esc(x.mes)}</td><td class="n">${kwhF(x.kwh)}</td><td class="n">${kwhF(x.hist)}</td><td class="n">${pc(x.dev)}</td><td>${pill(x.cls)}</td><td class="n">${brl(x.extraCusto)}</td><td style="white-space:normal">${esc(ev.t)}${(m.ctx||[]).length?'<br>'+m.ctx.map(id=>esc((CTX.find(c=>c.id===id)||{t:id}).t)).join(', '):''}${m.obs?'<br>“'+esc(m.obs)+'”':''}</td></tr>`;}).join('')}</tbody></table>
+    <p class="rel-nota">Anomalia é uma variação em relação ao histórico. Não prova desperdício: pessoas, horários, eventos e equipamentos podem explicá-la.</p>`:'<p class="rel-vazio">Nenhum mês do período saiu do padrão histórico, ou não há base de comparação suficiente.</p>');
+  h+=sec('7. Recomendações de melhoria',`<table><thead><tr><th>Prioridade</th><th>Tipo</th><th>Alerta e indicador</th><th>Ação recomendada</th></tr></thead><tbody>${recs.map(r=>`<tr><td>${r.prio}</td><td>${r.tipo}</td><td style="white-space:normal"><b>${r.titulo}</b><br>${r.alerta}<br><span class="rel-nota">${r.ind}</span></td><td style="white-space:normal">${r.acao}</td></tr>`).join('')}</tbody></table><p class="rel-nota">As causas citadas nas recomendações são hipóteses para investigação, e não conclusões comprovadas.</p>`);
+  h+=sec('8. Situação das ações planejadas',P.length?`<table><thead><tr><th>Ação</th><th>Responsável</th><th>Início</th><th>Prazo</th><th>Status</th><th class="n">Custo</th><th class="n">Economia esperada</th><th class="n">Economia alcançada</th></tr></thead><tbody>${P.map(p=>`<tr><td style="white-space:normal">${esc(p.titulo)}${p.obs?`<br><span class="rel-nota">${esc(p.obs)}</span>`:''}</td><td>${esc(p.resp)||'não informado'}</td><td>${fmtDia(p.inicio)}</td><td>${fmtDia(p.prazo)}${planoAtraso(p)?' <b>(atrasada)</b>':''}</td><td>${p.status}</td><td class="n">${p.custo==null?'não informado':brl(p.custo)}</td><td class="n">${p.ekwh!=null||p.ebrl!=null?(p.ekwh!=null?kwhF(p.ekwh)+'/mês':'')+(eb(p)>0?' · '+brl(eb(p))+'/mês':''):'não informada'}</td><td class="n">${p.rkwh!=null||p.rbrl!=null?(p.rkwh!=null?kwhF(p.rkwh)+'/mês':'')+(p.rbrl!=null?' · '+brl(p.rbrl)+'/mês':''):'não informada'}</td></tr>`).join('')}</tbody></table>`:'<p class="rel-vazio">Nenhuma ação cadastrada no plano de acompanhamento.</p>');
+  h+=sec('9. Estimativa de economia',`<table class="rel-kv"><tbody>
+    ${kv('Potencial das variações do período <span class="tag-sim">projeção</span>',S.length?`${kwhF(potKwh)} e ${brl(potBrl)} se os meses acima do padrão voltassem à média histórica. Parte do aumento pode ter justificativa.`:'sem dados')}
+    ${kv('Economia esperada das ações <span class="tag-sim">projeção</span>',P.some(p=>p.ekwh!=null||p.ebrl!=null)?`${kwhF(sum(P.map(p=>p.ekwh||0)))}/mês e ${brl(sum(P.map(eb)))}/mês informados no plano.`:'nenhuma economia esperada informada')}
+    ${kv('Economia alcançada <span class="tag-med">informada pelo responsável</span>',P.some(p=>p.rkwh!=null||p.rbrl!=null)?`${kwhF(sum(P.map(p=>p.rkwh||0)))}/mês e ${brl(sum(P.map(p=>p.rbrl||0)))}/mês informados após medição.`:'nenhum resultado medido informado')}</tbody></table>
+    <p class="rel-nota">Projeções são estimativas e não representam economias realizadas. Só o resultado informado após a medição é tratado como alcançado.</p>`);
+  const falt=[];
+  if(!R.length)falt.push('valor real da conta não informado');
+  if(C.cob.semAno)falt.push(`${C.cob.semAno} registro(s) sem ano`);
+  if(!C.A.some(x=>x.ano&&x.mesNum&&x.antAno))falt.push('sem o mesmo mês do ano anterior para comparar a sazonalidade');
+  if(CONFIG.fonteSetores!=='medido')falt.push(`divisão por setor ${FONTES[CONFIG.fonteSetores].rot}, não medida`);
+  if(C.nivel!=='adequado')falt.push('histórico não cobre um ano completo');
+  h+=sec('10. Limitações e informações ausentes',`${falt.length?`<ul class="rel-lista">${falt.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p>Nenhuma informação essencial ausente.</p>'}
+    ${Q.length?`<ul class="rel-lista">${Q.map(q=>`<li><b>${q.t}.</b> ${esc(q.m)}</li>`).join('')}</ul>`:''}
+    <p class="rel-nota">O custo é estimado por kWh × tarifa e pode não incluir impostos, bandeiras tarifárias, demanda contratada e taxas de uma conta real. Este relatório usa apenas dados existentes na base; o que não foi informado aparece como “não informado”.</p>`);
+  $('#rel-doc').innerHTML=h;
+};
+/* ---------- caso demonstrativo (usa só os dados fictícios originais, sem depender dos dados do usuário) ---------- */
+const DEMO={i:3,tarifa:0.8};
+function demoCalc(){
+  const tot=DADOS_PADRAO.map(m=>m.total),i=DEMO.i;
+  const hist=sum(tot.filter((_,j)=>j!==i))/(tot.length-1),dev=(tot[i]/hist-1)*100;
+  const devs=tot.map((v,j)=>{const h=sum(tot.filter((_,k)=>k!==j))/(tot.length-1);return(v/h-1)*100;});
+  return{tot,hist,dev,devs,extraKwh:tot[i]-hist,extraCusto:(tot[i]-hist)*DEMO.tarifa};
+}
+V.demo=function(){
+  const d=demoCalc(),mes=DADOS_PADRAO[DEMO.i].mes,cls=classificar(d.dev),noPlano=!!state.plano['demo-abril'];
+  const pm=DADOS_PADRAO.map(m=>m.mes);
+  $('#demo-steps').innerHTML=`
+  <li class="card"><h2><span class="n">1</span> O sistema recebe os dados</h2><p class="cs">Seis meses de consumo fictícios de uma escola de exemplo.</p>
+    <div class="tw"><table><thead><tr><th>Mês</th>${pm.map(x=>`<th class="n">${x.slice(0,3)}</th>`).join('')}</tr></thead><tbody><tr><td>Consumo (kWh)</td>${d.tot.map((v,j)=>`<td class="n${j===DEMO.i?' up c':''}">${f0.format(v)}</td>`).join('')}</tr></tbody></table></div></li>
+  <li class="card"><h2><span class="n">2</span> Identifica uma variação relevante</h2><p class="cs">Compara ${mes} com a média dos outros cinco meses.</p>
+    <div class="mon"><div class="mm"><span>Média histórica</span><b>${kwhF(d.hist)}</b></div><div class="mm"><span>${mes}</span><b>${kwhF(d.tot[DEMO.i])}</b></div><div class="mm"><span>Variação</span><b>${pc(d.dev)}</b></div>
+    <div class="mm"><span>Depois</span><b>${pc(d.devs[4])} em ${pm[4].slice(0,3)}</b></div></div>
+    <div class="cbox" style="height:240px"><canvas id="c-demo"></canvas></div></li>
+  <li class="card insight ${CLS[cls].c}"><h2><span class="n">3</span> Gera um alerta</h2><p class="kp">${pill(cls)}<span class="ks">limiar de atenção: +${CONFIG.limiares.atencao}%</span></p>
+    <p class="in-txt">Consumo ${f1.format(d.dev)}% acima da média histórica. O aumento representa um custo adicional estimado de ${brl(d.extraCusto)} em relação ao consumo médio, com tarifa simulada de ${brl2(DEMO.tarifa)}/kWh. Isto é uma variação, e não prova desperdício.</p></li>
+  <li class="card"><h2><span class="n">4</span> Apresenta possíveis explicações</h2><p class="cs">São hipóteses para investigar. O sistema não afirma qual delas é a causa.</p>
+    <ul class="hyp">${EXPL_GERAL.map(x=>`<li>${x}</li>`).join('')}</ul></li>
+  <li class="card"><h2><span class="n">5</span> Recomenda uma investigação</h2><p>Verificar os horários de utilização dos equipamentos e comparar a rotina de ${mes} com os meses anteriores. Em ${pm[4]} e ${pm[5]} o consumo voltou a ${pc(d.devs[4])} e ${pc(d.devs[5])} da média, o que combina com uma causa pontual, mas isso ainda precisa ser confirmado.</p></li>
+  <li class="card"><h2><span class="n">6</span> O responsável registra uma observação</h2>
+    <div class="fl"><label for="demo-obs">Observação sobre ${mes} (exemplo fictício)</label><textarea id="demo-obs" placeholder="Ex.: Semana de feira de ciências, com laboratórios e ar-condicionado ligados até as 21h.">${esc(state.demo.obs)}</textarea></div>
+    <div class="row" style="margin-top:10px"><button class="btn" data-act="demo-reg">Registrar observação</button><button class="btn ghost" data-act="demo-ex">Usar texto de exemplo</button></div>
+    ${state.demo.reg?`<div class="callout ok" style="margin-top:12px"><b>Observação registrada</b><p>${esc(state.demo.obs||'(sem texto)')}</p></div>`:''}</li>
+  <li class="card"><h2><span class="n">7</span> A instituição acompanha a ação no plano</h2>
+    ${noPlano?`<ul class="plan"><li><span><b>${esc(state.plano['demo-abril'].titulo)}</b></span><span class="row"><select data-act="status" data-id="demo-abril" aria-label="Status da ação demonstrativa">${STATUS_PLANO.map(s=>`<option${state.plano['demo-abril'].status===s?' selected':''}>${s}</option>`).join('')}</select><button class="lnk" data-act="plano-rm" data-id="demo-abril">Remover</button></span></li></ul>`:
+    '<p class="cs">Adicione a ação ao plano para acompanhar o status.</p><button class="btn" data-act="demo-plano">Adicionar ao plano de acompanhamento</button>'}
+    <p class="note">As ações do plano ficam salvas neste navegador e aparecem também em “O que podemos melhorar?”.</p></li>`;
+  mk('c-demo',{type:'bar',data:{labels:pm.map(x=>x.slice(0,3)),datasets:[
+    {label:'Consumo (kWh)',data:d.tot,backgroundColor:d.tot.map((_,j)=>j===DEMO.i?css('--warn'):css('--s2')),borderRadius:5,maxBarThickness:56,order:2},
+    {type:'line',label:'Média histórica',data:d.tot.map(()=>d.hist),borderColor:css('--ink'),borderDash:[6,4],borderWidth:2,pointRadius:0,order:1}]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${f0.format(Math.round(c.parsed.y))} kWh`,afterBody:it=>`Variação: ${pc(d.devs[it[0].dataIndex])} (dados fictícios)`}}},scales:{y:Object.assign({},axisK,{beginAtZero:false,title:{display:true,text:'kWh'}}),x:axisX}}});
+};
+/* =====================================================================
+   7. NAVEGAÇÃO, FILTROS E EVENTOS
+   ===================================================================== */
+const ICON={
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  bars:'<path d="M5 20V11M12 20V4M19 20v-6"/>',
+  pulse:'<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>',
+  gauge:'<path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-5"/>',
+  coin:'<circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-.8-1.5-1.2-2.8-1.2-1.7 0-2.8.8-2.8 2 0 3 5.6 1.2 5.6 4.2 0 1.2-1.1 2-2.8 2-1.3 0-2.4-.5-3-1.4M12 6v2M12 16v2"/>',
+  list:'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>',
+  sliders:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+  doc:'<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9.5 12h5M9.5 16h5"/>',
+  play:'<circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/>',
+  table:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/>'
+};
+const VIEWS=[
+  {id:'visao-geral',t:'Visão geral',ic:'grid',s:'Quanto estamos consumindo, quanto isso custa e onde está a atenção.'},
+  {id:'consumo',t:'Análise de consumo',ic:'bars',s:'Consumo e custo ao longo dos meses, por setor, entre períodos e entre anos.'},
+  {id:'monitoramento',t:'Monitoramento inteligente',ic:'pulse',s:'Compara cada mês com a média histórica, aponta o que merece investigação e registra o contexto.'},
+  {id:'indice',t:'Índice de Atenção Energética',ic:'gauge',s:'Um indicador demonstrativo de 0 a 100: quanto menor, maior a atenção necessária.'},
+  {id:'financeiro',t:'Análise financeira',ic:'coin',s:'Custo estimado, valor real da conta, orçamento mensal e cenários com a tarifa que você definir.'},
+  {id:'melhorias',t:'O que podemos melhorar?',ic:'list',s:'Pontos de investigação baseados nos dados e plano de ações com prazo, custo e economia.'},
+  {id:'simulador',t:'Simulador de economia',ic:'sliders',s:'Estime o efeito de reduzir o consumo. Os valores são simulações.'},
+  {id:'relatorio',t:'Relatório de eficiência',ic:'doc',s:'Resumo organizado do período, pronto para ler, copiar ou imprimir.'},
+  {id:'demo',t:'Caso demonstrativo',ic:'play',s:'Veja, em sete passos e com dados fictícios, como o painel transforma consumo em decisão.'},
+  {id:'dados',t:'Dados',ic:'table',s:'Edite os registros, informe a origem dos setores ou importe uma planilha.'}
+];
+$('#nav').innerHTML=VIEWS.map(v=>`<a href="#${v.id}" data-v="${v.id}"><svg viewBox="0 0 24 24" aria-hidden="true">${ICON[v.ic]}</svg>${v.t}</a>`).join('');
+
+const ehPadrao=igualDemo;
+/* mensagens ao usuário (avisos de validação e erros). O detalhe técnico vai para o console. */
+let _errT=null;
+function avisar(msg,tipo,fixo){
+  const b=$('#errbar');if(!b)return;
+  b.className='callout '+(tipo==='crit'?'crit':tipo==='ok'?'ok':'warn');
+  b.innerHTML=`<p>${esc(msg)}</p>`;b.hidden=false;
+  clearTimeout(_errT);if(!fixo)_errT=setTimeout(()=>{b.hidden=true;},9000);
+}
+function mostrarErro(err){console.error('[Energia em Foco]',err);avisar('Não foi possível montar esta seção. Seus dados não foram alterados. Detalhe técnico: '+((err&&err.message)||err),'crit',true);}
+window.addEventListener('error',ev=>{console.error('[Energia em Foco] erro não tratado:',ev.error||ev.message);avisar('Ocorreu um erro inesperado. Seus dados salvos não foram alterados. Se continuar, recarregue a página.','crit',true);});
+window.addEventListener('unhandledrejection',ev=>{console.error('[Energia em Foco] promessa rejeitada:',ev.reason);});
+
+function renderShell(){
+  $('#banner').innerHTML=(ehPadrao()?'<span>Dados simulados para fins de demonstração. Nenhum valor representa uma escola ou empresa real.</span><a href="#dados">Editar ou importar dados</a>':
+    '<span>Dados inseridos manualmente. Confira a origem antes de usar os resultados.</span><a href="#dados">Editar dados</a>')+(storageOk?'':'<span>Armazenamento local indisponível: as alterações não serão mantidas ao atualizar a página.</span>');
+  $('#chips').innerHTML=DATA.map((m,i)=>`<button class="chip" data-act="mes" data-i="${i}" aria-pressed="${state.meses.has(i)}">${esc(rot(m))}</button>`).join('');
+  $('#f-setor').innerHTML='<option value="todos">Todos os setores</option>'+SETORES.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('');
+  $('#f-setor').value=state.setor;
+  $('#f-foco').innerHTML=DATA.map((m,i)=>`<option value="${i}">${esc(rot(m))}</option>`).join('');
+  $('#f-foco').value=state.foco;
+  const opt=DATA.map((m,i)=>`<option value="${i}">${esc(rot(m))}</option>`).join('');
+  [['cA1',state.cmpA[0]],['cA2',state.cmpA[1]],['cB1',state.cmpB[0]],['cB2',state.cmpB[1]]].forEach(([id,v])=>{const e=$('#'+id);e.innerHTML=opt;e.value=v;});
+  $$('[data-bind="tarifa"]').forEach(e=>{if(document.activeElement!==e)e.value=state.tarifa;e.disabled=state.usarBase;});
+  $('#f-usarbase').checked=state.usarBase;
+  const v=VIEWS.find(x=>x.id===state.view);
+  $('#crumb').textContent='Energia em Foco';$('#h1').textContent=v.t;$('#sub').textContent=v.s;
+  document.title='Energia em Foco';
+  $$('.view').forEach(e=>e.hidden=e.id!=='v-'+state.view);
+  $$('#nav a').forEach(a=>{if(a.dataset.v===state.view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  const semFiltro=state.view==='dados'||state.view==='demo';
+  $('.filters').hidden=semFiltro;$('#histbar').hidden=semFiltro;
+}
+function render(){
+  try{
+    norm();renderShell();themeChart();
+    const C=compute();
+    if(!$('#histbar').hidden)$('#histbar').innerHTML=avisoHist(C);
+    V[state.view](C);
+  }catch(err){mostrarErro(err);}
+  salvar();
+}
+function setPreset(p){
+  const n=DATA.length;
+  state.meses=new Set(p==='all'?DATA.map((_,i)=>i):p==='first3'?[0,1,2].filter(i=>i<n):p==='last3'?[n-3,n-2,n-1].filter(i=>i>=0):[state.foco]);
+}
+function route(){
+  const h=(location.hash||'').replace('#','');
+  state.view=VIEWS.some(v=>v.id===h)?h:'visao-geral';
+  render();window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+function resetEstado(){state.meses=new Set(DATA.map((_,k)=>k));state.setor='todos';state.foco=maiorDesvioIdx();defaultCmp();}
+/* confirmação em dois cliques para operações que podem substituir informações */
+const CONF={k:null};
+function confirmar(b){
+  const key=b.dataset.act+'|'+(b.dataset.i||b.dataset.id||'');
+  if(CONF.k===key){CONF.k=null;return true;}
+  CONF.k=key;b.dataset.orig=b.dataset.orig||b.textContent;b.textContent=b.dataset.conf;b.classList.add('confirm');
+  setTimeout(()=>{if(CONF.k===key)CONF.k=null;if(b.isConnected&&b.dataset.orig){b.textContent=b.dataset.orig;b.classList.remove('confirm');}},6000);
+  return false;
+}
+function restaurarBackup(){
+  const bk=lerBackup();if(!bk){avisar('Não há cópia de segurança para restaurar.','crit');return;}
+  try{
+    const s=JSON.parse(bk.estado);if(!validData(s.dados))throw new Error('cópia com formato inválido');
+    fazerBackup('antes de restaurar uma cópia');
+    DATA=s.dados.map(normMes);const c=s.config||{};
+    if(c.meta>0)CONFIG.metaMensalKwh=c.meta;if(c.orc>0)CONFIG.orcamentoMensal=c.orc;
+    if(c.lim&&c.lim.atencao>0&&c.lim.critico>c.lim.atencao)CONFIG.limiares={atencao:c.lim.atencao,critico:c.lim.critico};
+    if(FONTES[c.fonte])CONFIG.fonteSetores=c.fonte;if(typeof c.metodo==='string')CONFIG.metodoSetores=c.metodo;
+    state.plano={};Object.keys(s.plano||{}).forEach(k=>{const p=normPlano(s.plano[k]);if(p)state.plano[k]=p;});
+    resetEstado();render();avisar('Cópia restaurada. Os dados que estavam na tela foram guardados como nova cópia de segurança.','ok');
+  }catch(e){console.error(e);avisar('Não foi possível restaurar a cópia: ela está incompleta. Nada foi alterado.','crit');}
+}
+function pfSet(el){
+  const p=state.plano[el.dataset.id];if(!p)return;const k=el.dataset.k;
+  if(['custo','ekwh','ebrl','rkwh','rbrl'].includes(k)){
+    const raw=el.value.trim();
+    if(raw===''){p[k]=null;el.removeAttribute('aria-invalid');}
+    else{const v=pnum(raw);if(isNaN(v)||v<0){el.setAttribute('aria-invalid','true');return;}el.removeAttribute('aria-invalid');p[k]=v;}
+  }else if(k==='status'){if(STATUS_PLANO.includes(el.value))p.status=el.value;}
+  else p[k]=el.value;
+  salvar();atualizarPlano(el.dataset.id);
+}
+
+document.addEventListener('click',e=>{
+  const p=e.target.closest('[data-p]');if(p){setPreset(p.dataset.p);render();return;}
+  const b=e.target.closest('[data-act]');if(!b||b.tagName==='SELECT'||b.tagName==='INPUT'||b.tagName==='TEXTAREA')return;
+  if(b.dataset.conf&&!confirmar(b))return;
+  const a=b.dataset.act,i=+b.dataset.i;
+  if(a==='mes'){if(state.meses.has(i)){if(state.meses.size>1)state.meses.delete(i);}else state.meses.add(i);render();}
+  else if(a==='foco'){state.foco=i;render();}
+  else if(a==='ctx'){const m=DATA[state.foco],id=b.dataset.id;m.ctx=m.ctx||[];const k=m.ctx.indexOf(id);if(k>-1)m.ctx.splice(k,1);else m.ctx.push(id);render();}
+  else if(a==='plano'){const id=b.dataset.id,r=RECS.find(x=>x.id===id);if(state.plano[id])delete state.plano[id];else if(r)state.plano[id]=novoPlano(r.titulo);render();}
+  else if(a==='plano-rm'){delete state.plano[b.dataset.id];render();}
+  else if(a==='plano-add'){const t=$('#plano-novo').value.trim(),m=$('#plano-msg');
+    if(!t){m.textContent='Digite o nome da ação antes de adicionar.';return;}
+    m.textContent='';let pid='m-'+Date.now();while(state.plano[pid])pid+='x';state.plano[pid]=novoPlano(t);$('#plano-novo').value='';render();}
+  else if(a==='sim-pre'){state.simPct=+b.dataset.v;render();}
+  else if(a==='add-mes'){
+    const l=DATA[DATA.length-1],k=keyMA(l);let novo;
+    if(k!==null){let nk=k+1;while(DATA.some(m=>keyMA(m)===nk))nk++;novo=normMes({mes:MESES[nk%12],ano:Math.floor(nk/12),tarifa:l.tarifa,total:null,setores:{}});}
+    else novo=normMes({mes:'Novo mês',ano:null,tarifa:l.tarifa,total:null,setores:{}});
+    DATA.push(novo);state.meses.add(DATA.length-1);defaultCmp();render();}
+  else if(a==='del-mes'){if(DATA.length>2){fazerBackup('antes de remover um registro');DATA.splice(i,1);resetEstado();render();}}
+  else if(a==='reset-dados'){fazerBackup('antes de restaurar os dados simulados');DATA=clone(DADOS_PADRAO).map(normMes);CONFIG.metaMensalKwh=8500;CONFIG.orcamentoMensal=7000;CONFIG.limiares={atencao:10,critico:40};CONFIG.fonteSetores='simulado';CONFIG.metodoSetores=METODO_PADRAO;resetEstado();PENDENTE=null;render();}
+  else if(a==='restaurar-backup'){restaurarBackup();}
+  else if(a==='mig-ok'){if(AVISO_MIG)AVISO_MIG.visto=true;render();}
+  else if(a==='ano-aplicar'){
+    const v=pnum($('#ano-aplicar').value);
+    if(isNaN(v)||!Number.isInteger(v)||!anoOk(v)){avisar(`Informe um ano inteiro entre ${ANO_MIN} e ${ANO_MAX}.`,'crit');CONF.k=null;return;}
+    const antes=DATA.map(m=>m.ano);DATA.forEach(m=>{if(!anoOk(m.ano))m.ano=v;});
+    const dup=DATA.findIndex((m,k)=>indiceDuplicado(m,k)>=0);
+    if(dup>=0){DATA.forEach((m,k)=>{m.ano=antes[k];});avisar(`Aplicar ${v} criaria meses duplicados (${DATA[dup].mes} aparece mais de uma vez). Nada foi alterado: informe o ano de cada linha manualmente.`,'crit');return;}
+    fazerBackup('antes de aplicar o ano aos registros sem ano');ordenarDados();render();avisar(`Ano ${v} aplicado aos registros sem ano.`,'ok');}
+  else if(a==='ordenar'){fazerBackup('antes de ordenar por data');if(!ordenarDados())avisar('Os registros já estão em ordem de data.','ok');render();}
+  else if(a==='copy-csv'){
+    const t=$('#csv-out');t.select();
+    const ok=()=>{$('#copy-msg').textContent='Copiado.';};
+    try{navigator.clipboard.writeText(t.value).then(ok,()=>{$('#copy-msg').textContent='Texto selecionado. Use Ctrl+C para copiar.';});}
+    catch(x){$('#copy-msg').textContent='Texto selecionado. Use Ctrl+C para copiar.';}
+  }
+  else if(a==='csv-ex'){$('#csv-in').value='Mes;Ano;Tarifa;Total;Climatizacao;Iluminacao;Informatica;Administrativo;Outros;ContaReal\nJaneiro;2025;0,80;7800;2700;1900;1500;1100;600;6890,50\nFevereiro;2025;0,80;8100;;;;;;\nMarço;2025;0,80;"8.300";;;;;;\nAbril;2025;0,85;"10.700";;;;;;';mostrarVerificacao(parseCSV($('#csv-in').value,{anoPadrao:lerAnoCSV()}));}
+  else if(a==='csv-check'){mostrarVerificacao(parseCSV($('#csv-in').value,{anoPadrao:lerAnoCSV()}));}
+  else if(a==='csv-confirm'){
+    if(PENDENTE){fazerBackup('antes de importar uma planilha');DATA=PENDENTE;PENDENTE=null;
+      if(DATA.every(m=>keyMA(m)!==null))DATA.sort((x,y)=>keyMA(x)-keyMA(y));
+      resetEstado();render();const m=$('#csv-msg');m.className='okmsg';m.textContent=`${DATA.length} meses importados. Uma cópia dos dados anteriores foi guardada e pode ser restaurada. Defina a origem dos valores por setor abaixo, se informados.`;$('#csv-confirm').hidden=true;}
+  }
+  else if(a==='demo-reg'){state.demo.obs=$('#demo-obs').value;state.demo.reg=true;render();}
+  else if(a==='demo-ex'){state.demo.obs='Semana de feira de ciências em Abril, com laboratórios e ar-condicionado ligados até as 21h. (exemplo fictício)';render();}
+  else if(a==='demo-plano'){state.plano['demo-abril']=novoPlano('Comparar a rotina de Abril com os meses anteriores (caso demonstrativo)');render();}
+  else if(a==='rel-copy'){
+    const t=$('#rel-doc'),txt=t.innerText||t.textContent||'',msg=$('#rel-msg');
+    const sel=()=>{try{window.getSelection().selectAllChildren(t);}catch(x){}msg.textContent='Texto selecionado. Use Ctrl+C para copiar.';};
+    try{navigator.clipboard.writeText(txt).then(()=>{msg.textContent='Relatório copiado.';},sel);}catch(x){sel();}
+  }
+  else if(a==='rel-print'){try{window.print();}catch(x){avisar('A impressão não está disponível aqui. Use Ctrl+P no navegador.','crit');}}
+});
+document.addEventListener('change',e=>{
+  const s=e.target.closest('select[data-act="status"]');
+  if(s&&state.plano[s.dataset.id]){state.plano[s.dataset.id].status=s.value;salvar();render();return;}
+  const f=e.target.closest('[data-act="pf"]');if(f)pfSet(f);
+});
+document.addEventListener('input',e=>{
+  const f=e.target.closest('[data-act="pf"]');if(f)pfSet(f);
+  if(e.target.id==='demo-obs'){state.demo.obs=e.target.value;state.demo.reg=false;salvar();}
+});
+$('#f-setor').addEventListener('change',e=>{state.setor=e.target.value;render();});
+$('#f-foco').addEventListener('change',e=>{state.foco=+e.target.value;render();});
+$('#f-usarbase').addEventListener('change',e=>{state.usarBase=e.target.checked;render();});
+$$('[data-bind="tarifa"]').forEach(el=>el.addEventListener('input',()=>{const v=pnum(el.value);if(isFinite(v)&&v>=0){state.tarifa=v;render();}}));
+[['cA1','cmpA',0],['cA2','cmpA',1],['cB1','cmpB',0],['cB2','cmpB',1]].forEach(([id,k,pos])=>$('#'+id).addEventListener('change',e=>{
+  const v=+e.target.value,r=state[k];r[pos]=v;
+  if(pos===0&&r[1]<v)r[1]=v;if(pos===1&&r[0]>v)r[0]=v;render();}));
+$('#cmp-mes').addEventListener('change',e=>{state.cmpMes=+e.target.value;render();});
+$('#fin-reaj').addEventListener('input',e=>{const v=pnum(e.target.value);if(isFinite(v)&&v>=0){state.reaj=v;render();}});
+$('#sim-base').addEventListener('change',e=>{state.simBase=e.target.value;render();});
+$('#sim-custom').addEventListener('input',e=>{const v=pnum(e.target.value);if(isFinite(v)&&v>=0){state.simCustom=v;render();}});
+$('#sim-pct').addEventListener('input',e=>{state.simPct=+e.target.value;render();});
+$('#sim-pct-n').addEventListener('input',e=>{const v=pnum(e.target.value);if(isFinite(v)){state.simPct=clamp(v,0,100);render();}});
+function setLim(){
+  const a=pnum($('#th-at').value),c=pnum($('#th-cr').value);
+  if(isFinite(a)&&isFinite(c)&&a>0&&c>a){CONFIG.limiares={atencao:a,critico:c};render();}
+}
+$('#th-at').addEventListener('input',setLim);$('#th-cr').addEventListener('input',setLim);
+function setMeta(el){const v=pnum(el.value);if(isFinite(v)&&v>0){CONFIG.metaMensalKwh=v;if(el.id==='meta-idx'&&$('#meta-in'))$('#meta-in').value=v;render();}}
+$('#meta-in').addEventListener('input',e=>setMeta(e.target));$('#meta-idx').addEventListener('input',e=>setMeta(e.target));
+function setOrc(el){const v=pnum(el.value);if(isFinite(v)&&v>0){CONFIG.orcamentoMensal=v;['orc-in','orc-in2'].forEach(id=>{if(id!==el.id)$('#'+id).value=v;});render();}}
+$('#orc-in').addEventListener('input',e=>setOrc(e.target));$('#orc-in2').addEventListener('input',e=>setOrc(e.target));
+/* contexto e observações do mês em foco */
+$('#ctx-inv').addEventListener('change',e=>{DATA[state.foco].inv=e.target.value;render();});
+$('#ctx-obs').addEventListener('input',e=>{DATA[state.foco].obs=e.target.value;salvar();});
+$('#ctx-obs').addEventListener('change',()=>render());
+/* origem dos setores */
+$('#cfg-fonte').addEventListener('change',e=>{CONFIG.fonteSetores=e.target.value;render();});
+$('#cfg-metodo').addEventListener('input',e=>{CONFIG.metodoSetores=e.target.value;salvar();$('#cfg-aviso').innerHTML=`${fonteBadge()} <span class="ks">${notaSetores()}</span>`;});
+/* edição da tabela de dados: números atualizam só o custo; mês e ano são validados ao sair do campo */
+$('#dados-tbl').addEventListener('input',e=>{
+  const el=e.target.closest('input[data-k]');if(!el||el.dataset.k==='mes'||el.dataset.k==='ano')return;
+  const i=+el.dataset.i,k=el.dataset.k,m=DATA[i];
+  const vazio=el.value.trim()==='';
+  const v=vazio?null:pnum(el.value);
+  if(!vazio&&(isNaN(v)||v<0)){el.setAttribute('aria-invalid','true');el.title='Informe um número maior ou igual a zero.';return;}
+  el.removeAttribute('aria-invalid');el.removeAttribute('title');
+  if(k==='tarifa'){if(v===null)return;m.tarifa=v;}else if(k==='total')m.total=v;else if(k==='conta')m.conta=v;else m.setores[k]=v;
+  const t=totalMes(m);$('#cus-'+i).textContent=isNum(t)?brl(t*(state.usarBase?m.tarifa:state.tarifa)):'sem dados';
+  $('#csv-out').value=csvOut();salvar();renderShell();desenharValidacao();
+});
+$('#dados-tbl').addEventListener('change',e=>{
+  const el=e.target.closest('input[data-k="mes"],input[data-k="ano"]');if(!el)return;
+  const i=+el.dataset.i,k=el.dataset.k,m=DATA[i],cand=Object.assign({},m);
+  const volta=()=>{el.value=k==='mes'?m.mes:(m.ano==null?'':m.ano);};
+  if(k==='mes'){
+    const nome=el.value.trim();
+    if(!nome){avisar('O nome do mês não pode ficar vazio.','crit');volta();return;}
+    cand.mes=nome;const pm=parseMesAno(nome);
+    if(pm.ano&&anoOk(m.ano)&&pm.ano!==m.ano){avisar(`O mês indica ${pm.ano}, mas a coluna Ano diz ${m.ano}. Corrija um dos dois.`,'crit');volta();return;}
+  }else{
+    const raw=el.value.trim();
+    if(raw==='')cand.ano=null;
+    else{const v=pnum(raw);if(isNaN(v)||!Number.isInteger(v)||!anoOk(v)){avisar(`O ano deve ser um número inteiro entre ${ANO_MIN} e ${ANO_MAX}.`,'crit');volta();el.setAttribute('aria-invalid','true');return;}cand.ano=v;}
+  }
+  el.removeAttribute('aria-invalid');
+  const novo=normMes(cand),dup=indiceDuplicado(novo,i);
+  if(dup>=0){avisar(`${rot(novo)} já existe na linha ${dup+1}. O mesmo mês não pode aparecer duas vezes no mesmo ano.`,'crit');volta();return;}
+  DATA[i]=novo;
+  if(ordenarDados())render();
+  else{el.value=k==='mes'?novo.mes:(novo.ano==null?'':novo.ano);salvar();renderShell();desenharValidacao();$('#csv-out').value=csvOut();}
+});
+$('#csv-file').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(f)lerArquivo(f);e.target.value='';});
+$('#csv-in').addEventListener('input',()=>{PENDENTE=null;$('#csv-confirm').hidden=true;});
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>render());}catch(e){}
+new MutationObserver(()=>render()).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+if(!(SAVED&&SAVED.ui&&Number.isInteger(SAVED.ui.foco)))state.foco=maiorDesvioIdx();
+defaultCmp();
+if(!location.hash)history.replaceState(null,'','#visao-geral');
+route();
+</script>
+
+</body></html>
